@@ -38,7 +38,7 @@ public static class TestHelper
                 .UseTextForParameters("Diagnostics"),
             verifier
                 .Verify(driver)
-                //.AutoVerify()
+                .AutoVerify()
                 .UseDirectory("Snapshots"));
     }
 }

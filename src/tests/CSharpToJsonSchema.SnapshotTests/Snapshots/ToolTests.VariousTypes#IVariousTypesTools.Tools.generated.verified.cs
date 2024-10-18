@@ -66,6 +66,74 @@ namespace CSharpToJsonSchema.IntegrationTests
                         Required = new string[] { "parameter1", "parameter2", "parameter3", "parameter4", "parameter5", "dateTime", "date" },
                     },
                 },
+
+                new global::CSharpToJsonSchema.Tool
+                {
+                    Name = "SetValue",
+                    Description = "Sets the value",
+                    Strict = false,
+                    Parameters = new global::CSharpToJsonSchema.OpenApiSchema
+                    {
+                        Type = "object",
+                        Description = "Sets the value",
+                        Properties = new global::System.Collections.Generic.Dictionary<string, global::CSharpToJsonSchema.OpenApiSchema>
+                        {
+                            ["value"] = new global::CSharpToJsonSchema.OpenApiSchema
+                            {
+                                Type = "integer",
+                                Format = "int32",
+                                Description = "",
+                            }
+                        },
+                        Required = new string[] { "value" },
+                    },
+                },
+
+                new global::CSharpToJsonSchema.Tool
+                {
+                    Name = "GetValue",
+                    Description = "Gets the value",
+                    Strict = false,
+                    Parameters = new global::CSharpToJsonSchema.OpenApiSchema
+                    {
+                        Type = "object",
+                        Description = "Gets the value",
+                    },
+                },
+
+                new global::CSharpToJsonSchema.Tool
+                {
+                    Name = "SetValueAsync",
+                    Description = "Sets the value",
+                    Strict = false,
+                    Parameters = new global::CSharpToJsonSchema.OpenApiSchema
+                    {
+                        Type = "object",
+                        Description = "Sets the value",
+                        Properties = new global::System.Collections.Generic.Dictionary<string, global::CSharpToJsonSchema.OpenApiSchema>
+                        {
+                            ["value"] = new global::CSharpToJsonSchema.OpenApiSchema
+                            {
+                                Type = "integer",
+                                Format = "int32",
+                                Description = "",
+                            }
+                        },
+                        Required = new string[] { "value" },
+                    },
+                },
+
+                new global::CSharpToJsonSchema.Tool
+                {
+                    Name = "GetValueAsync",
+                    Description = "Gets the value",
+                    Strict = false,
+                    Parameters = new global::CSharpToJsonSchema.OpenApiSchema
+                    {
+                        Type = "object",
+                        Description = "Gets the value",
+                    },
+                },
             };
         }
     }

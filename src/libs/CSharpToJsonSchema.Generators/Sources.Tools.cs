@@ -1,4 +1,4 @@
-using H.Generators;
+﻿using H.Generators;
 using H.Generators.Extensions;
 using CSharpToJsonSchema.Generators.Core;
 
@@ -26,7 +26,7 @@ internal static partial class Sources
 {indent}                        Items = {GenerateOpenApiSchema(parameter.ArrayItem.First(), depth: depth + 1)},
 {indent}                    }}";
         }
-        if (parameter.SchemaType == "object")
+        if (parameter.Properties.Count != 0)
         {
             return $@"new {name}
 {indent}                    {{

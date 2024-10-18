@@ -1,5 +1,7 @@
 ﻿// ReSharper disable RedundantUsingDirective
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
 namespace CSharpToJsonSchema.IntegrationTests;
@@ -16,6 +18,18 @@ public interface IVariousTypesTools
         bool parameter5,
         DateTime dateTime,
         DateOnly date);
+    
+    [Description("Sets the value")]
+    public void SetValue(int value);
+    
+    [Description("Gets the value")]
+    public int GetValue();
+    
+    [Description("Sets the value")]
+    public Task SetValueAsync(int value, CancellationToken cancellationToken = default);
+    
+    [Description("Gets the value")]
+    public Task<int> GetValueAsync(CancellationToken cancellationToken = default);
 }
 
 public class VariousTypesService : IVariousTypesTools
@@ -30,5 +44,25 @@ public class VariousTypesService : IVariousTypesTools
         DateOnly date)
     {
         return true;
+    }
+
+    public void SetValue(int value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetValue()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SetValueAsync(int value, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<int> GetValueAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }

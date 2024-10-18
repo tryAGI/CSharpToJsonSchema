@@ -29,7 +29,7 @@ public static class ToModels
                     Name: x.Name,
                     Description: GetDescription(x),
                     IsAsync: x.IsAsync || x.ReturnType.Name == "Task",
-                    IsVoid: x.ReturnsVoid,
+                    IsVoid: x.ReturnsVoid || x.ReturnType.MetadataName == "Task",
                     IsStrict: isStrict,
                     Parameters: new OpenApiSchema(
                         Name: x.Name,
