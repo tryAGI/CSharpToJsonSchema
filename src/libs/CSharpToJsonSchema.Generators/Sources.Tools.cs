@@ -11,9 +11,8 @@ internal static partial class Sources
     /// </summary>
     /// <param name="parameter"></param>
     /// <param name="depth"></param>
-    /// <param name="schema"></param>
     /// <returns></returns>
-    public static string GenerateOpenApiSchema(OpenApiSchema parameter, int depth = 0, bool schema = true)
+    public static string GenerateOpenApiSchema(OpenApiSchema parameter, int depth = 0)
     {
         var indent = new string(' ', depth * 4);
         const string name = "global::CSharpToJsonSchema.OpenApiSchema";
@@ -81,7 +80,7 @@ namespace {@interface.Namespace}
                     Name = ""{method.Name}"",
                     Description = ""{method.Description}"",
                     Strict = {(method.IsStrict ? "true" : "false")},
-                    Parameters = {GenerateOpenApiSchema(method.Parameters, schema: false)},
+                    Parameters = {GenerateOpenApiSchema(method.Parameters)},
                 }},
 ").Inject()}
             }};
