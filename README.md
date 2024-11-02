@@ -29,7 +29,7 @@ public class Weather
     public string Description { get; set; } = string.Empty;
 }
 
-[OpenAiTools(Strict = true)] // false by default. You can't use parameters with default values in Strict mode.
+[GenerateJsonSchema(Strict = true)] // false by default. You can't use parameters with default values in Strict mode.
 public interface IWeatherFunctions
 {
     [Description("Get the current weather in a given location")]
