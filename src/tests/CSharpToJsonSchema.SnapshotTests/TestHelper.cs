@@ -12,7 +12,7 @@ public static class TestHelper
         string source,
         CancellationToken cancellationToken = default)
     {
-        var referenceAssemblies = LatestReferenceAssemblies.Net80;
+        var referenceAssemblies = LatestReferenceAssemblies.Net90;
         var references = await referenceAssemblies.ResolveAsync(null, cancellationToken);
         references = references
             .Add(MetadataReference.CreateFromFile(typeof(CSharpToJsonSchema.GenerateJsonSchemaAttribute).Assembly.Location));
