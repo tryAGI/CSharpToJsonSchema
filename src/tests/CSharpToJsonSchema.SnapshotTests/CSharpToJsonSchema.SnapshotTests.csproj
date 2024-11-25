@@ -9,7 +9,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="H.Generators.Tests.Extensions" Version="1.23.0" />
+    <PackageReference Include="H.Generators.Tests.Extensions" Version="1.24.0" />
     <PackageReference Include="H.Resources.Generator" Version="1.6.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
