@@ -9,12 +9,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="H.Generators.Tests.Extensions" Version="1.24.0" />
+    <PackageReference Include="H.Generators.Tests.Extensions" Version="1.24.1" />
     <PackageReference Include="H.Resources.Generator" Version="1.6.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MSTest" Version="3.7.0" />
+    <PackageReference Include="MSTest" Version="3.7.1" />
     <PackageReference Include="FluentAssertions" Version="7.0.0" />
   </ItemGroup>
   
