@@ -36,41 +36,12 @@ public class JsonSchemaGenerator : IIncrementalGenerator
         attributes
             .SelectAndReportExceptions(AsCalls, context, Id)
             .AddSource(context);
-
-        
-
         
         var generator = new JsonSourceGenerator();
         generator.Initialize2(context);
-
-        //compilationProvider.a("CSharpToJsonSchema.GenerateJsonSchemaAttribute").SelectAndReportExceptions(PrepareData,context, Id);
     }
 
-    private static bool IsCandidate(SyntaxNode node)
-    {
-        // We only care about classes that have at least one attribute list
-        return node is InterfaceDeclarationSyntax cds && cds.AttributeLists.Count > 0;
-    }
-
-    /// <summary>
-    /// Extracts ClassData if the class has [GenerateJsonTypeInfo].
-    /// </summary>
-    private static ClassData? GetClassData(GeneratorSyntaxContext context)
-    {
-        var classDecl = (InterfaceDeclarationSyntax)context.Node;
-        var symbol = (INamedTypeSymbol?)context.SemanticModel.GetDeclaredSymbol(classDecl);
-        if (symbol == null)
-            return null;
-
-        // Check if class has [CSharpToJsonSchema.GenerateJsonTypeInfoAttribute]
-        var hasAttribute = symbol.GetAttributes().Any(a =>
-            a.AttributeClass?.ToDisplayString()
-            == "CSharpToJsonSchema.GenerateJsonSchemaAttribute");
-
-        return hasAttribute ? new ClassData(symbol) : null;
-    }
-
-
+    
     private static InterfaceData PrepareData(
         (SemanticModel SemanticModel, AttributeData AttributeData, InterfaceDeclarationSyntax InterfaceSyntax, INamedTypeSymbol InterfaceSymbol) tuple)
     {

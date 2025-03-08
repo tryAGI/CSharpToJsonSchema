@@ -1,51 +1,51 @@
-﻿//HintName: IWeatherStrictTools.Calls.generated.cs
+﻿//HintName: IWeatherTools.Calls.generated.cs
 #nullable enable
 
 namespace CSharpToJsonSchema.IntegrationTests
 {
-        public class GetCurrentWeather2Args
+        public class GetCurrentWeatherArgs
         {
             public string Location { get; set; } = string.Empty;
-            public global::CSharpToJsonSchema.IntegrationTests.Unit2 Unit { get; set; }
+            public global::CSharpToJsonSchema.IntegrationTests.Unit Unit { get; set; }
         }
 
-        public class GetCurrentWeatherAsync2Args
+        public class GetCurrentWeatherAsyncArgs
         {
             public string Location { get; set; } = string.Empty;
-            public global::CSharpToJsonSchema.IntegrationTests.Unit2 Unit { get; set; }
+            public global::CSharpToJsonSchema.IntegrationTests.Unit Unit { get; set; }
         }
 
-    public static partial class WeatherStrictToolsExtensions
+    public static partial class WeatherToolsExtensions
     {
 
 
 
-        public static global::System.Collections.Generic.IReadOnlyDictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>> AsCalls(this IWeatherStrictTools service)
+        public static global::System.Collections.Generic.IReadOnlyDictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>> AsCalls(this IWeatherTools service)
         {
             return new global::System.Collections.Generic.Dictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>>
             {
-                ["GetCurrentWeather2"] = (json, _) =>
+                ["GetCurrentWeather"] = (json, _) =>
                 {
-                    return global::System.Threading.Tasks.Task.FromResult(service.CallGetCurrentWeather2(json));
+                    return global::System.Threading.Tasks.Task.FromResult(service.CallGetCurrentWeather(json));
                 },
  
-                ["GetCurrentWeatherAsync2"] = async (json, cancellationToken) =>
+                ["GetCurrentWeatherAsync"] = async (json, cancellationToken) =>
                 {
-                    return await service.CallGetCurrentWeatherAsync2(json, cancellationToken);
+                    return await service.CallGetCurrentWeatherAsync(json, cancellationToken);
                 },
  
             };
         }
 
-        public static GetCurrentWeather2Args AsGetCurrentWeather2Args(
-            this IWeatherStrictTools functions,
+        public static GetCurrentWeatherArgs AsGetCurrentWeatherArgs(
+            this IWeatherTools functions,
             string json)
         {
             #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {
                 return
-                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeather2Args>(json, new global::System.Text.Json.JsonSerializerOptions
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
@@ -55,13 +55,13 @@ namespace CSharpToJsonSchema.IntegrationTests
             }
             else
             {
-                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.WeatherStrictToolsExtensionsJsonSerializerContext.Default.GetCurrentWeather2Args) ??
+                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.WeatherToolsExtensionsJsonSerializerContext.Default.GetCurrentWeatherArgs) ??
                 throw new global::System.InvalidOperationException("Could not deserialize JSON.");     
       
             }
             #else
             return
-                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeather2Args>(json, new global::System.Text.Json.JsonSerializerOptions
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
@@ -70,15 +70,15 @@ namespace CSharpToJsonSchema.IntegrationTests
             #endif
         }
 
-        public static GetCurrentWeatherAsync2Args AsGetCurrentWeatherAsync2Args(
-            this IWeatherStrictTools functions,
+        public static GetCurrentWeatherAsyncArgs AsGetCurrentWeatherAsyncArgs(
+            this IWeatherTools functions,
             string json)
         {
             #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {
                 return
-                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherAsync2Args>(json, new global::System.Text.Json.JsonSerializerOptions
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
@@ -88,13 +88,13 @@ namespace CSharpToJsonSchema.IntegrationTests
             }
             else
             {
-                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.WeatherStrictToolsExtensionsJsonSerializerContext.Default.GetCurrentWeatherAsync2Args) ??
+                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.WeatherToolsExtensionsJsonSerializerContext.Default.GetCurrentWeatherAsyncArgs) ??
                 throw new global::System.InvalidOperationException("Could not deserialize JSON.");     
       
             }
             #else
             return
-                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherAsync2Args>(json, new global::System.Text.Json.JsonSerializerOptions
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
@@ -103,10 +103,10 @@ namespace CSharpToJsonSchema.IntegrationTests
             #endif
         }
 
-        public static string CallGetCurrentWeather2(this IWeatherStrictTools functions, string json)
+        public static string CallGetCurrentWeather(this IWeatherTools functions, string json)
         {
-            var args = functions.AsGetCurrentWeather2Args(json);
-            var jsonResult = functions.GetCurrentWeather2(args.Location, args.Unit);
+            var args = functions.AsGetCurrentWeatherArgs(json);
+            var jsonResult = functions.GetCurrentWeather(args.Location, args.Unit);
 
      #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
@@ -119,7 +119,7 @@ namespace CSharpToJsonSchema.IntegrationTests
             }
             else
             {
-                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.WeatherStrictToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.WeatherToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
             }
             #else            
               return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
@@ -133,13 +133,13 @@ namespace CSharpToJsonSchema.IntegrationTests
 
  
 
-        public static async global::System.Threading.Tasks.Task<string> CallGetCurrentWeatherAsync2(
-            this IWeatherStrictTools functions,
+        public static async global::System.Threading.Tasks.Task<string> CallGetCurrentWeatherAsync(
+            this IWeatherTools functions,
             string json,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
-            var args = functions.AsGetCurrentWeatherAsync2Args(json);
-            var jsonResult = await functions.GetCurrentWeatherAsync2(args.Location, args.Unit, cancellationToken);
+            var args = functions.AsGetCurrentWeatherAsyncArgs(json);
+            var jsonResult = await functions.GetCurrentWeatherAsync(args.Location, args.Unit, cancellationToken);
 
            #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
@@ -152,7 +152,7 @@ namespace CSharpToJsonSchema.IntegrationTests
             }
             else
             {
-                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.WeatherStrictToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.WeatherToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
             }
             #else
             return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
@@ -168,7 +168,7 @@ namespace CSharpToJsonSchema.IntegrationTests
  
 
         public static async global::System.Threading.Tasks.Task<string> CallAsync(
-            this IWeatherStrictTools service,
+            this IWeatherTools service,
             string functionName,
             string argumentsAsJson,
             global::System.Threading.CancellationToken cancellationToken = default)
@@ -180,7 +180,7 @@ namespace CSharpToJsonSchema.IntegrationTests
         }
     }
 
-        public partial class WeatherStrictToolsExtensionsJsonSerializerContext: global::System.Text.Json.Serialization.JsonSerializerContext
+        public partial class WeatherToolsExtensionsJsonSerializerContext: global::System.Text.Json.Serialization.JsonSerializerContext
         {
             
         }

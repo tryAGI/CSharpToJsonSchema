@@ -30,17 +30,26 @@ public static class TestHelper
             .RunGeneratorsAndUpdateCompilation(compilation, out compilation, out _, cancellationToken);
         var diagnostics = compilation.GetDiagnostics(cancellationToken);
 
+        var x = await verifier
+            .Verify(diagnostics)
+            //.AutoVerify()
+            .UseDirectory("Snapshots")
+            .UseTextForParameters("Diagnostics");
+        var x2 = await verifier
+            .Verify(driver)
+            .AppendValues()
+            .UseDirectory("Snapshots");
+        
         await Task.WhenAll(
             verifier
                 .Verify(diagnostics)
-                
                 //.AutoVerify()
                 .UseDirectory("Snapshots")
-                .UseTextForParameters("Diagnostics")
-                .ScrubLinesContaining("[]"),
+                .UseTextForParameters("Diagnostics"),
+                
             verifier
                 .Verify(driver)
                 .AppendValues()
-                .UseDirectory("Snapshots").ScrubLinesContaining("[]"));
+                .UseDirectory("Snapshots"));
     }
 }

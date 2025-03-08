@@ -76,15 +76,15 @@ namespace CSharpToJsonSchema.Generators.JsonGen
             public void ReportDiagnostic(DiagnosticDescriptor descriptor, Location? location,
                 params object?[]? messageArgs)
             {
-                Debug.Assert(_contextClassLocation != null);
-
-                if (location is null || !_knownSymbols.Compilation.ContainsLocation(location))
-                {
-                    // If location is null or is a location outside of the current compilation, fall back to the location of the context class.
-                    location = _contextClassLocation;
-                }
-
-                Diagnostics.Add(DiagnosticInfo.Create(descriptor, location, messageArgs));
+                // Debug.Assert(_contextClassLocation != null);
+                //
+                // if (location is null || !_knownSymbols.Compilation.ContainsLocation(location))
+                // {
+                //     // If location is null or is a location outside of the current compilation, fall back to the location of the context class.
+                //     location = _contextClassLocation;
+                // }
+                //
+                // Diagnostics.Add(DiagnosticInfo.Create(descriptor, location, messageArgs));
             }
 
             public Parser(KnownTypeSymbols knownSymbols)
