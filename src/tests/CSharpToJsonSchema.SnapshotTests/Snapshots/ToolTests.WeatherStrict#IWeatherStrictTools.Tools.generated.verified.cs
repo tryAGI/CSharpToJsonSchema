@@ -1,20 +1,20 @@
-﻿//HintName: IWeatherTools.Tools.generated.cs
+﻿//HintName: IWeatherStrictTools.Tools.generated.cs
 
 #nullable enable
 
 namespace CSharpToJsonSchema.IntegrationTests
 {
-    public static partial class WeatherToolsExtensions
+    public static partial class WeatherStrictToolsExtensions
     {
-        public static global::System.Collections.Generic.IList<global::CSharpToJsonSchema.Tool> AsTools(this IWeatherTools functions)
+        public static global::System.Collections.Generic.IList<global::CSharpToJsonSchema.Tool> AsTools(this IWeatherStrictTools functions)
         {
             return new global::System.Collections.Generic.List<global::CSharpToJsonSchema.Tool>
             {
                 new global::CSharpToJsonSchema.Tool
                 {
-                    Name = "GetCurrentWeather",
+                    Name = "GetCurrentWeather2",
                     Description = "Get the current weather in a given location",
-                    Strict = false,
+                    Strict = true,
                     Parameters = new global::CSharpToJsonSchema.OpenApiSchema
                     {
                         Type = "object",
@@ -33,15 +33,15 @@ namespace CSharpToJsonSchema.IntegrationTests
                                 Enum = new string[] { "celsius", "fahrenheit" },
                             }
                         },
-                        Required = new string[] { "location" },
+                        Required = new string[] { "location", "unit" },
                     },
                 },
 
                 new global::CSharpToJsonSchema.Tool
                 {
-                    Name = "GetCurrentWeatherAsync",
+                    Name = "GetCurrentWeatherAsync2",
                     Description = "Get the current weather in a given location",
-                    Strict = false,
+                    Strict = true,
                     Parameters = new global::CSharpToJsonSchema.OpenApiSchema
                     {
                         Type = "object",
@@ -60,7 +60,7 @@ namespace CSharpToJsonSchema.IntegrationTests
                                 Enum = new string[] { "celsius", "fahrenheit" },
                             }
                         },
-                        Required = new string[] { "location" },
+                        Required = new string[] { "location", "unit" },
                     },
                 },
             };
