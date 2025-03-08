@@ -21,8 +21,5 @@ public partial class ComplexClassSerializerTools
     }
 }
 
-public partial class ComplexClassSerializerToolsJsonSerializerContext : JsonSerializerContext
-{
-    
-}
+
 
