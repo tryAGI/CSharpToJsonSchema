@@ -3,8 +3,6 @@
 
 namespace CSharpToJsonSchema.IntegrationTests
 {
-    public static partial class WeatherToolsExtensions
-    {
         public class GetCurrentWeatherArgs
         {
             public string Location { get; set; } = string.Empty;
@@ -16,6 +14,11 @@ namespace CSharpToJsonSchema.IntegrationTests
             public string Location { get; set; } = string.Empty;
             public global::CSharpToJsonSchema.IntegrationTests.Unit Unit { get; set; }
         }
+
+    public static partial class WeatherToolsExtensions
+    {
+
+
 
         public static global::System.Collections.Generic.IReadOnlyDictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>> AsCalls(this IWeatherTools service)
         {
@@ -34,30 +37,70 @@ namespace CSharpToJsonSchema.IntegrationTests
             };
         }
 
-        public static WeatherToolsExtensions.GetCurrentWeatherArgs AsGetCurrentWeatherArgs(
+        public static GetCurrentWeatherArgs AsGetCurrentWeatherArgs(
             this IWeatherTools functions,
             string json)
         {
-            return
-                global::System.Text.Json.JsonSerializer.Deserialize<WeatherToolsExtensions.GetCurrentWeatherArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+            #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {
+                return
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
                 }) ??
                 throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+    
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.WeatherToolsExtensionsJsonSerializerContext.Default.GetCurrentWeatherArgs) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");     
+      
+            }
+            #else
+            return
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            #endif
         }
 
-        public static WeatherToolsExtensions.GetCurrentWeatherAsyncArgs AsGetCurrentWeatherAsyncArgs(
+        public static GetCurrentWeatherAsyncArgs AsGetCurrentWeatherAsyncArgs(
             this IWeatherTools functions,
             string json)
         {
-            return
-                global::System.Text.Json.JsonSerializer.Deserialize<WeatherToolsExtensions.GetCurrentWeatherAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+            #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {
+                return
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
                 }) ??
                 throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+    
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.WeatherToolsExtensionsJsonSerializerContext.Default.GetCurrentWeatherAsyncArgs) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");     
+      
+            }
+            #else
+            return
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            #endif
         }
 
         public static string CallGetCurrentWeather(this IWeatherTools functions, string json)
@@ -65,11 +108,27 @@ namespace CSharpToJsonSchema.IntegrationTests
             var args = functions.AsGetCurrentWeatherArgs(json);
             var jsonResult = functions.GetCurrentWeather(args.Location, args.Unit);
 
-            return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+     #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {
-                PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
-                Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
-            });
+                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
+                });
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.WeatherToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+            }
+            #else            
+              return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
+                });
+            #endif
+            
         }
 
  
@@ -82,12 +141,29 @@ namespace CSharpToJsonSchema.IntegrationTests
             var args = functions.AsGetCurrentWeatherAsyncArgs(json);
             var jsonResult = await functions.GetCurrentWeatherAsync(args.Location, args.Unit, cancellationToken);
 
+           #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {
+                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
+                });
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.WeatherToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+            }
+            #else
             return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
             {
                 PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                 Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
             });
+            #endif
+            
         }
+        
 
  
 
@@ -103,4 +179,9 @@ namespace CSharpToJsonSchema.IntegrationTests
             return await func(argumentsAsJson, cancellationToken);
         }
     }
+
+        public partial class WeatherToolsExtensionsJsonSerializerContext: global::System.Text.Json.Serialization.JsonSerializerContext
+        {
+            
+        }
 }

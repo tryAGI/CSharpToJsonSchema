@@ -1,6 +1,6 @@
-﻿using H.Generators;
+﻿using CSharpToJsonSchema.Generators.Models;
+using H.Generators;
 using H.Generators.Extensions;
-using CSharpToJsonSchema.Generators.Core;
 
 namespace CSharpToJsonSchema.Generators;
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -19,8 +19,8 @@
   </ItemGroup>
   
   <ItemGroup Label="Resources">
-    <EmbeddedResource Include="../CSharpToJsonSchema.IntegrationTests/*Tools.cs" Visible="false" />
-    <AdditionalFiles Include="../CSharpToJsonSchema.IntegrationTests/*Tools.cs" Visible="false" />
+    <EmbeddedResource Include="../CSharpToJsonSchema.IntegrationTests/*Tools.cs"  />
+    <AdditionalFiles Include="../CSharpToJsonSchema.IntegrationTests/*Tools.cs" HResourcesGenerator_Resource="true"/>
   </ItemGroup>
   
   <ItemGroup>
@@ -38,6 +38,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\libs\CSharpToJsonSchema.Generators\CSharpToJsonSchema.Generators.csproj" />
     <ProjectReference Include="..\..\libs\CSharpToJsonSchema\CSharpToJsonSchema.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Snapshots\" />
   </ItemGroup>
 
 </Project>

@@ -3,8 +3,6 @@
 
 namespace CSharpToJsonSchema.IntegrationTests
 {
-    public static partial class VariousTypesToolsExtensions
-    {
         public class GetCurrentWeatherArgs
         {
             public long Parameter1 { get; set; }
@@ -35,6 +33,11 @@ namespace CSharpToJsonSchema.IntegrationTests
         {
             
         }
+
+    public static partial class VariousTypesToolsExtensions
+    {
+
+
 
         public static global::System.Collections.Generic.IReadOnlyDictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>> AsCalls(this IVariousTypesTools service)
         {
@@ -68,69 +71,79 @@ namespace CSharpToJsonSchema.IntegrationTests
             };
         }
 
-        public static VariousTypesToolsExtensions.GetCurrentWeatherArgs AsGetCurrentWeatherArgs(
+        public static GetCurrentWeatherArgs AsGetCurrentWeatherArgs(
             this IVariousTypesTools functions,
             string json)
         {
+            
             return
-                global::System.Text.Json.JsonSerializer.Deserialize<VariousTypesToolsExtensions.GetCurrentWeatherArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeatherArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
                 }) ??
                 throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            
         }
 
-        public static VariousTypesToolsExtensions.SetValueArgs AsSetValueArgs(
+        public static SetValueArgs AsSetValueArgs(
             this IVariousTypesTools functions,
             string json)
         {
+            
             return
-                global::System.Text.Json.JsonSerializer.Deserialize<VariousTypesToolsExtensions.SetValueArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                global::System.Text.Json.JsonSerializer.Deserialize<SetValueArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
                 }) ??
                 throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            
         }
 
-        public static VariousTypesToolsExtensions.GetValueArgs AsGetValueArgs(
+        public static GetValueArgs AsGetValueArgs(
             this IVariousTypesTools functions,
             string json)
         {
+            
             return
-                global::System.Text.Json.JsonSerializer.Deserialize<VariousTypesToolsExtensions.GetValueArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                global::System.Text.Json.JsonSerializer.Deserialize<GetValueArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
                 }) ??
                 throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            
         }
 
-        public static VariousTypesToolsExtensions.SetValueAsyncArgs AsSetValueAsyncArgs(
+        public static SetValueAsyncArgs AsSetValueAsyncArgs(
             this IVariousTypesTools functions,
             string json)
         {
+            
             return
-                global::System.Text.Json.JsonSerializer.Deserialize<VariousTypesToolsExtensions.SetValueAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                global::System.Text.Json.JsonSerializer.Deserialize<SetValueAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
                 }) ??
                 throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            
         }
 
-        public static VariousTypesToolsExtensions.GetValueAsyncArgs AsGetValueAsyncArgs(
+        public static GetValueAsyncArgs AsGetValueAsyncArgs(
             this IVariousTypesTools functions,
             string json)
         {
+            
             return
-                global::System.Text.Json.JsonSerializer.Deserialize<VariousTypesToolsExtensions.GetValueAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                global::System.Text.Json.JsonSerializer.Deserialize<GetValueAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
                 }) ??
                 throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            
         }
 
         public static string CallGetCurrentWeather(this IVariousTypesTools functions, string json)
@@ -201,4 +214,9 @@ namespace CSharpToJsonSchema.IntegrationTests
             return await func(argumentsAsJson, cancellationToken);
         }
     }
+
+        public partial class VariousTypesToolsExtensionsJsonSerializerContext: global::System.Text.Json.Serialization.JsonSerializerContext
+        {
+            
+        }
 }

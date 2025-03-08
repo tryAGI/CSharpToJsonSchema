@@ -1,3 +1,4 @@
+using CSharpToJsonSchema.Generators.Models;
 using H.Generators;
 using H.Generators.Extensions;
 
@@ -8,19 +9,21 @@ internal static partial class Sources
     public static string GenerateCalls(InterfaceData @interface)
     {
         var extensionsClassName = @interface.Name.Substring(startIndex: 1) + "Extensions";
-        
-        return @$"#nullable enable
+        var res = @$"#nullable enable
 
 namespace {@interface.Namespace}
 {{
-    public static partial class {extensionsClassName}
-    {{
 {@interface.Methods.Select(static method => $@"
         public class {method.Name}Args
         {{
             {string.Join("\n            ", method.Parameters.Properties.Select(static x => $@"public {x.Type}{(x.IsNullable ? "?" : "")} {x.Name.ToPropertyName()} {{ get; set; }}{(!string.IsNullOrEmpty(x.DefaultValue) ? $" = {x.DefaultValue};" : "")}"))}
         }}
 ").Inject()}
+
+    public static partial class {extensionsClassName}
+    {{
+
+
 
         public static global::System.Collections.Generic.IReadOnlyDictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>> AsCalls(this {@interface.Name} service)
         {{
@@ -58,17 +61,37 @@ namespace {@interface.Namespace}
         }}
 
 {@interface.Methods.Select(method => $@"
-        public static {extensionsClassName}.{method.Name}Args As{method.Name}Args(
+        public static {method.Name}Args As{method.Name}Args(
             this {@interface.Name} functions,
             string json)
         {{
-            return
-                global::System.Text.Json.JsonSerializer.Deserialize<{extensionsClassName}.{method.Name}Args>(json, new global::System.Text.Json.JsonSerializerOptions
+            #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {{
+                return
+                global::System.Text.Json.JsonSerializer.Deserialize<{method.Name}Args>(json, new global::System.Text.Json.JsonSerializerOptions
                 {{
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{{{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}}}
                 }}) ??
                 throw new global::System.InvalidOperationException(""Could not deserialize JSON."");
+    
+            }}
+            else
+            {{
+                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.{method.Name}Args) ??
+                throw new global::System.InvalidOperationException(""Could not deserialize JSON."");     
+      
+            }}
+            #else
+            return
+                global::System.Text.Json.JsonSerializer.Deserialize<{method.Name}Args>(json, new global::System.Text.Json.JsonSerializerOptions
+                {{
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{{{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}}}
+                }}) ??
+                throw new global::System.InvalidOperationException(""Could not deserialize JSON."");
+            #endif
         }}
 ").Inject()}
 
@@ -78,11 +101,27 @@ namespace {@interface.Namespace}
             var args = functions.As{method.Name}Args(json);
             var jsonResult = functions.{method.Name}({string.Join(", ", method.Parameters.Properties.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
 
-            return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+     #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {{
-                PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
-                Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
-            }});
+                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {{
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
+                }});
+            }}
+            else
+            {{
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+            }}
+            #else            
+              return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {{
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
+                }});
+            #endif
+            
         }}
 ").Inject()}
 
@@ -104,12 +143,29 @@ namespace {@interface.Namespace}
             var jsonResult = await functions.{method.Name}({string.Join(", ", method.Parameters.Properties
                 .Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}").Append("cancellationToken"))});
 
+           #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {{
+                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {{
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
+                }});
+            }}
+            else
+            {{
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+            }}
+            #else
             return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
             {{
                 PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                 Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
             }});
+            #endif
+            
         }}
+        
 ").Inject()}
 
 {@interface.Methods.Where(static x => x is { IsAsync: true, IsVoid: true }).Select(method => $@"
@@ -137,6 +193,13 @@ namespace {@interface.Namespace}
             return await func(argumentsAsJson, cancellationToken);
         }}
     }}
+
+        public partial class {extensionsClassName}JsonSerializerContext: global::System.Text.Json.Serialization.JsonSerializerContext
+        {{
+            
+        }}
 }}";
+
+        return res;
     }
 }
