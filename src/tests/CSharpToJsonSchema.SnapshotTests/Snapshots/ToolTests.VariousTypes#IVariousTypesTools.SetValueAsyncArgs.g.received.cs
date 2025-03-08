@@ -45,6 +45,7 @@ namespace CSharpToJsonSchema.IntegrationTests
             return jsonTypeInfo;
         }
 
+        private static global::System.Text.Json.Serialization.Metadata.JsonPropertyInfo[] SetValueAsyncArgsPropInit(global::System.Text.Json.JsonSerializerOptions options)
         {
             var properties = new global::System.Text.Json.Serialization.Metadata.JsonPropertyInfo[1];
 

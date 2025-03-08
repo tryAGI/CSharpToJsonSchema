@@ -79,6 +79,7 @@ public static class SymbolGenerator
         var assemblyName = "TemporaryAssembly";
         var compilation = originalCompilation
             .AddSyntaxTrees(syntaxTree);
+            //.WithAssemblyName(assemblyName);
         
 
         // Get the semantic model for our newly added syntax tree

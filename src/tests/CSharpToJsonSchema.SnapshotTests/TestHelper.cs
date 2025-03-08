@@ -29,7 +29,7 @@ public static class TestHelper
             .Create(new JsonSchemaGenerator())
             .RunGeneratorsAndUpdateCompilation(compilation, out compilation, out _, cancellationToken);
         var diagnostics = compilation.GetDiagnostics(cancellationToken);
-        
+
         await Task.WhenAll(
             verifier
                 .Verify(diagnostics)

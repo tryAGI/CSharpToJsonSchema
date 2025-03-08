@@ -63,6 +63,7 @@ namespace CSharpToJsonSchema.IntegrationTests
                                 Description = "",
                             }
                         },
+                        Required = new string[] { "parameter1", "parameter2", "parameter3", "parameter4", "parameter5", "dateTime", "date" },
                     },
                 },
 
@@ -84,6 +85,7 @@ namespace CSharpToJsonSchema.IntegrationTests
                                 Description = "",
                             }
                         },
+                        Required = new string[] { "value" },
                     },
                 },
 
@@ -117,6 +119,7 @@ namespace CSharpToJsonSchema.IntegrationTests
                                 Description = "",
                             }
                         },
+                        Required = new string[] { "value" },
                     },
                 },
 
