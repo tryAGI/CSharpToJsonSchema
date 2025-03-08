@@ -1,8 +1,8 @@
 using System.ComponentModel;
-using H.Generators;
+using CSharpToJsonSchema.Generators.Models;
 using Microsoft.CodeAnalysis;
 
-namespace CSharpToJsonSchema.Generators.Core.Conversion;
+namespace CSharpToJsonSchema.Generators.Conversion;
 
 public static class ToModels
 {

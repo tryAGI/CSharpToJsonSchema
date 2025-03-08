@@ -1,4 +1,4 @@
-namespace H.Generators;
+namespace CSharpToJsonSchema.Generators.Models;
 
 public readonly record struct InterfaceData(
     string Namespace,

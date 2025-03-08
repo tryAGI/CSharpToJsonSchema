@@ -1,6 +1,4 @@
-using CSharpToJsonSchema.Generators.Core;
-
-namespace H.Generators;
+namespace CSharpToJsonSchema.Generators.Models;
 
 public readonly record struct MethodData(
     string Name,

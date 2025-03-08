@@ -12,7 +12,7 @@ namespace CSharpToJsonSchema.IntegrationTests
             {
                 new global::CSharpToJsonSchema.Tool
                 {
-                    Name = "GetCurrentWeather",
+                    Name = "GetCurrentWeather3",
                     Description = "Get the current weather in a given location",
                     Strict = false,
                     Parameters = new global::CSharpToJsonSchema.OpenApiSchema

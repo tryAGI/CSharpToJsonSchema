@@ -10,7 +10,7 @@ namespace CSharpToJsonSchema.IntegrationTests;
 public interface IVariousTypesTools
 {
     [Description("Get the current weather in a given location")]
-    public bool GetCurrentWeather(
+    public bool GetCurrentWeather3(
         long parameter1,
         int parameter2,
         double parameter3,
@@ -34,7 +34,7 @@ public interface IVariousTypesTools
 
 public class VariousTypesService : IVariousTypesTools
 {
-    public bool GetCurrentWeather(
+    public bool GetCurrentWeather3(
         long parameter1,
         int parameter2,
         double parameter3,

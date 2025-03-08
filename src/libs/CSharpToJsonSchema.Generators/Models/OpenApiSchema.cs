@@ -1,4 +1,4 @@
-namespace CSharpToJsonSchema.Generators.Core;
+namespace CSharpToJsonSchema.Generators.Models;
 
 public readonly record struct OpenApiSchema(
     string Name,

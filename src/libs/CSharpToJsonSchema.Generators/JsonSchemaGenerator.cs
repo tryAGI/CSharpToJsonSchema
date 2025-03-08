@@ -1,8 +1,11 @@
+using CSharpToJsonSchema.Generators.Conversion;
+using CSharpToJsonSchema.Generators.JsonGen;
 using H.Generators;
 using H.Generators.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using CSharpToJsonSchema.Generators.Core.Conversion;
+using CSharpToJsonSchema.Generators.Models;
+using Microsoft.CodeAnalysis.Text;
 
 namespace CSharpToJsonSchema.Generators;
 
@@ -25,14 +28,19 @@ public class JsonSchemaGenerator : IIncrementalGenerator
                 .ForAttributeWithMetadataName("CSharpToJsonSchema.GenerateJsonSchemaAttribute")
                 .SelectManyAllAttributesOfCurrentInterfaceSyntax()
                 .SelectAndReportExceptions(PrepareData, context, Id);
-        
+
         attributes
             .SelectAndReportExceptions(AsTools, context, Id)
             .AddSource(context);
+        
         attributes
             .SelectAndReportExceptions(AsCalls, context, Id)
             .AddSource(context);
+        
+        var generator = new JsonSourceGenerator();
+        generator.Initialize2(context);
     }
+
     
     private static InterfaceData PrepareData(
         (SemanticModel SemanticModel, AttributeData AttributeData, InterfaceDeclarationSyntax InterfaceSyntax, INamedTypeSymbol InterfaceSymbol) tuple)
@@ -41,20 +49,28 @@ public class JsonSchemaGenerator : IIncrementalGenerator
 
         return interfaceSymbol.PrepareData(attributeData);
     }
-    
+
     private static FileWithName AsTools(InterfaceData @interface)
     {
         return new FileWithName(
             Name: $"{@interface.Name}.Tools.generated.cs",
             Text: Sources.GenerateClientImplementation(@interface));
     }
-    
+
     private static FileWithName AsCalls(InterfaceData @interface)
     {
         return new FileWithName(
             Name: $"{@interface.Name}.Calls.generated.cs",
             Text: Sources.GenerateCalls(@interface));
     }
+    
+   
+
+    public static (string hintName, SourceText sourceText) AsCalls2(InterfaceData @interface)
+    {
+        return ($"{@interface.Name}.Calls.generated.cs", SourceText.From(Sources.GenerateCalls(@interface)));
+    }
+
 
     #endregion
 }

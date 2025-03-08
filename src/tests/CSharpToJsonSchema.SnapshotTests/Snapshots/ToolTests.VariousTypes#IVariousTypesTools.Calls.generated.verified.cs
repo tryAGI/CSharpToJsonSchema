@@ -3,9 +3,7 @@
 
 namespace CSharpToJsonSchema.IntegrationTests
 {
-    public static partial class VariousTypesToolsExtensions
-    {
-        public class GetCurrentWeatherArgs
+        public class GetCurrentWeather3Args
         {
             public long Parameter1 { get; set; }
             public int Parameter2 { get; set; }
@@ -36,13 +34,18 @@ namespace CSharpToJsonSchema.IntegrationTests
             
         }
 
+    public static partial class VariousTypesToolsExtensions
+    {
+
+
+
         public static global::System.Collections.Generic.IReadOnlyDictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>> AsCalls(this IVariousTypesTools service)
         {
             return new global::System.Collections.Generic.Dictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>>
             {
-                ["GetCurrentWeather"] = (json, _) =>
+                ["GetCurrentWeather3"] = (json, _) =>
                 {
-                    return global::System.Threading.Tasks.Task.FromResult(service.CallGetCurrentWeather(json));
+                    return global::System.Threading.Tasks.Task.FromResult(service.CallGetCurrentWeather3(json));
                 },
 
                 ["GetValue"] = (json, _) =>
@@ -68,81 +71,197 @@ namespace CSharpToJsonSchema.IntegrationTests
             };
         }
 
-        public static VariousTypesToolsExtensions.GetCurrentWeatherArgs AsGetCurrentWeatherArgs(
+        public static GetCurrentWeather3Args AsGetCurrentWeather3Args(
             this IVariousTypesTools functions,
             string json)
         {
-            return
-                global::System.Text.Json.JsonSerializer.Deserialize<VariousTypesToolsExtensions.GetCurrentWeatherArgs>(json, new global::System.Text.Json.JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
-                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
-                }) ??
-                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
-        }
-
-        public static VariousTypesToolsExtensions.SetValueArgs AsSetValueArgs(
-            this IVariousTypesTools functions,
-            string json)
-        {
-            return
-                global::System.Text.Json.JsonSerializer.Deserialize<VariousTypesToolsExtensions.SetValueArgs>(json, new global::System.Text.Json.JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
-                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
-                }) ??
-                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
-        }
-
-        public static VariousTypesToolsExtensions.GetValueArgs AsGetValueArgs(
-            this IVariousTypesTools functions,
-            string json)
-        {
-            return
-                global::System.Text.Json.JsonSerializer.Deserialize<VariousTypesToolsExtensions.GetValueArgs>(json, new global::System.Text.Json.JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
-                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
-                }) ??
-                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
-        }
-
-        public static VariousTypesToolsExtensions.SetValueAsyncArgs AsSetValueAsyncArgs(
-            this IVariousTypesTools functions,
-            string json)
-        {
-            return
-                global::System.Text.Json.JsonSerializer.Deserialize<VariousTypesToolsExtensions.SetValueAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
-                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
-                }) ??
-                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
-        }
-
-        public static VariousTypesToolsExtensions.GetValueAsyncArgs AsGetValueAsyncArgs(
-            this IVariousTypesTools functions,
-            string json)
-        {
-            return
-                global::System.Text.Json.JsonSerializer.Deserialize<VariousTypesToolsExtensions.GetValueAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
-                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
-                }) ??
-                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
-        }
-
-        public static string CallGetCurrentWeather(this IVariousTypesTools functions, string json)
-        {
-            var args = functions.AsGetCurrentWeatherArgs(json);
-            var jsonResult = functions.GetCurrentWeather(args.Parameter1, args.Parameter2, args.Parameter3, args.Parameter4, args.Parameter5, args.DateTime, args.Date);
-
-            return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+            #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {
-                PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
-                Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
-            });
+                return
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeather3Args>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+    
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.VariousTypesToolsExtensionsJsonSerializerContext.Default.GetCurrentWeather3Args) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");     
+      
+            }
+            #else
+            return
+                global::System.Text.Json.JsonSerializer.Deserialize<GetCurrentWeather3Args>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            #endif
+        }
+
+        public static SetValueArgs AsSetValueArgs(
+            this IVariousTypesTools functions,
+            string json)
+        {
+            #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {
+                return
+                global::System.Text.Json.JsonSerializer.Deserialize<SetValueArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+    
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.VariousTypesToolsExtensionsJsonSerializerContext.Default.SetValueArgs) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");     
+      
+            }
+            #else
+            return
+                global::System.Text.Json.JsonSerializer.Deserialize<SetValueArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            #endif
+        }
+
+        public static GetValueArgs AsGetValueArgs(
+            this IVariousTypesTools functions,
+            string json)
+        {
+            #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {
+                return
+                global::System.Text.Json.JsonSerializer.Deserialize<GetValueArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+    
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.VariousTypesToolsExtensionsJsonSerializerContext.Default.GetValueArgs) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");     
+      
+            }
+            #else
+            return
+                global::System.Text.Json.JsonSerializer.Deserialize<GetValueArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            #endif
+        }
+
+        public static SetValueAsyncArgs AsSetValueAsyncArgs(
+            this IVariousTypesTools functions,
+            string json)
+        {
+            #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {
+                return
+                global::System.Text.Json.JsonSerializer.Deserialize<SetValueAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+    
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.VariousTypesToolsExtensionsJsonSerializerContext.Default.SetValueAsyncArgs) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");     
+      
+            }
+            #else
+            return
+                global::System.Text.Json.JsonSerializer.Deserialize<SetValueAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            #endif
+        }
+
+        public static GetValueAsyncArgs AsGetValueAsyncArgs(
+            this IVariousTypesTools functions,
+            string json)
+        {
+            #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {
+                return
+                global::System.Text.Json.JsonSerializer.Deserialize<GetValueAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+    
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Deserialize(json, global::CSharpToJsonSchema.IntegrationTests.VariousTypesToolsExtensionsJsonSerializerContext.Default.GetValueAsyncArgs) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");     
+      
+            }
+            #else
+            return
+                global::System.Text.Json.JsonSerializer.Deserialize<GetValueAsyncArgs>(json, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}
+                }) ??
+                throw new global::System.InvalidOperationException("Could not deserialize JSON.");
+            #endif
+        }
+
+        public static string CallGetCurrentWeather3(this IVariousTypesTools functions, string json)
+        {
+            var args = functions.AsGetCurrentWeather3Args(json);
+            var jsonResult = functions.GetCurrentWeather3(args.Parameter1, args.Parameter2, args.Parameter3, args.Parameter4, args.Parameter5, args.DateTime, args.Date);
+
+     #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {
+                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
+                });
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.VariousTypesToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+            }
+            #else            
+              return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
+                });
+            #endif
+            
         }
 
         public static string CallGetValue(this IVariousTypesTools functions, string json)
@@ -150,11 +269,27 @@ namespace CSharpToJsonSchema.IntegrationTests
             var args = functions.AsGetValueArgs(json);
             var jsonResult = functions.GetValue();
 
-            return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+     #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {
-                PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
-                Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
-            });
+                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
+                });
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.VariousTypesToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+            }
+            #else            
+              return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
+                });
+            #endif
+            
         }
 
         public static void CallSetValue(this IVariousTypesTools functions, string json)
@@ -171,12 +306,29 @@ namespace CSharpToJsonSchema.IntegrationTests
             var args = functions.AsGetValueAsyncArgs(json);
             var jsonResult = await functions.GetValueAsync(cancellationToken);
 
+           #if NET6_0_OR_GREATER
+            if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
+            {
+                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+                    Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
+                });
+            }
+            else
+            {
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.VariousTypesToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+            }
+            #else
             return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
             {
                 PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                 Converters = { new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) },
             });
+            #endif
+            
         }
+        
 
         public static async global::System.Threading.Tasks.Task<string> CallSetValueAsync(
             this IVariousTypesTools functions,
@@ -201,4 +353,9 @@ namespace CSharpToJsonSchema.IntegrationTests
             return await func(argumentsAsJson, cancellationToken);
         }
     }
+
+        public partial class VariousTypesToolsExtensionsJsonSerializerContext: global::System.Text.Json.Serialization.JsonSerializerContext
+        {
+            
+        }
 }
