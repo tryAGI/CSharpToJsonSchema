@@ -14,17 +14,14 @@ internal static partial class Sources
 namespace {@interface.Namespace}
 {{
 {@interface.Methods.Select(static method => $@"
-        public class {method.Name}Args
-        {{
-            {string.Join("\n            ", method.Parameters.Properties.Select(static x => $@"public {x.Type}{(x.IsNullable ? "?" : "")} {x.Name.ToPropertyName()} {{ get; set; }}{(!string.IsNullOrEmpty(x.DefaultValue) ? $" = {x.DefaultValue};" : "")}"))}
-        }}
+    public class {method.Name}Args
+    {{
+         {string.Join("\n         ", method.Parameters.Properties.Select(static x => $@"public {x.Type}{(x.IsNullable ? "?" : "")} {x.Name.ToPropertyName()} {{ get; set; }}{(!string.IsNullOrEmpty(x.DefaultValue) ? $" = {x.DefaultValue};" : "")}"))}
+    }}
 ").Inject()}
 
     public static partial class {extensionsClassName}
     {{
-
-
-
         public static global::System.Collections.Generic.IReadOnlyDictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>> AsCalls(this {@interface.Name} service)
         {{
             return new global::System.Collections.Generic.Dictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>>
@@ -68,20 +65,19 @@ namespace {@interface.Namespace}
             #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {{
-                return
-                global::System.Text.Json.JsonSerializer.Deserialize<{method.Name}Args>(json, new global::System.Text.Json.JsonSerializerOptions
+                #pragma disable warning IL2026, IL3050
+                return global::System.Text.Json.JsonSerializer.Deserialize<{method.Name}Args>(json, new global::System.Text.Json.JsonSerializerOptions
                 {{
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{{{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}}}
                 }}) ??
                 throw new global::System.InvalidOperationException(""Could not deserialize JSON."");
-    
+                #pragma restore warning IL2026, IL3050
             }}
             else
             {{
                 return global::System.Text.Json.JsonSerializer.Deserialize(json, global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.{method.Name}Args) ??
-                throw new global::System.InvalidOperationException(""Could not deserialize JSON."");     
-      
+                throw new global::System.InvalidOperationException(""Could not deserialize JSON."");
             }}
             #else
             return
@@ -104,11 +100,13 @@ namespace {@interface.Namespace}
      #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {{
-                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                #pragma disable warning IL2026, IL3050
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
                 {{
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
                 }});
+                #pragma restore warning IL2026, IL3050  
             }}
             else
             {{
@@ -120,11 +118,9 @@ namespace {@interface.Namespace}
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
                 }});
-            #endif
-            
+            #endif            
         }}
 ").Inject()}
-
 {@interface.Methods.Where(static x => x is { IsAsync: false, IsVoid: true }).Select(method => $@"
         public static void Call{method.Name}(this {@interface.Name} functions, string json)
         {{
@@ -146,11 +142,13 @@ namespace {@interface.Namespace}
            #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {{
-                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
+                #pragma disable warning IL2026, IL3050
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
                 {{
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
                 }});
+                #pragma restore warning IL2026, IL3050
             }}
             else
             {{
@@ -194,12 +192,10 @@ namespace {@interface.Namespace}
         }}
     }}
 
-        public partial class {extensionsClassName}JsonSerializerContext: global::System.Text.Json.Serialization.JsonSerializerContext
-        {{
-            
-        }}
+    public partial class {extensionsClassName}JsonSerializerContext: global::System.Text.Json.Serialization.JsonSerializerContext
+    {{            
+    }}
 }}";
-
         return res;
     }
 }
