@@ -24,13 +24,13 @@ namespace CSharpToJsonSchema.IntegrationTests
             {
                 return Create_Double(options);
             }
-            if (type == typeof(global::CSharpToJsonSchema.IntegrationTests.GetCurrentWeatherArgs))
+            if (type == typeof(global::CSharpToJsonSchema.IntegrationTests.GetCurrentWeather2Args))
             {
-                return Create_GetCurrentWeatherArgs(options);
+                return Create_GetCurrentWeather2Args(options);
             }
-            if (type == typeof(global::CSharpToJsonSchema.IntegrationTests.GetCurrentWeatherAsyncArgs))
+            if (type == typeof(global::CSharpToJsonSchema.IntegrationTests.GetCurrentWeatherAsync2Args))
             {
-                return Create_GetCurrentWeatherAsyncArgs(options);
+                return Create_GetCurrentWeatherAsync2Args(options);
             }
             if (type == typeof(global::CSharpToJsonSchema.IntegrationTests.Unit2))
             {

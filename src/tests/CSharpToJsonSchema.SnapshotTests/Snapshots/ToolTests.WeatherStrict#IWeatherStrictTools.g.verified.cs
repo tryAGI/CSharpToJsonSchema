@@ -12,7 +12,30 @@ namespace CSharpToJsonSchema.IntegrationTests
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("CSharpToJsonSchema.Generators", "0.0.0.0")]
     public partial class WeatherStrictToolsExtensionsJsonSerializerContext
     {
-        private readonly static global::System.Text.Json.JsonSerializerOptions s_defaultOptions = new();
+        private readonly static global::System.Text.Json.JsonSerializerOptions s_defaultOptions = new(global::System.Text.Json.JsonSerializerDefaults.Web)
+        {
+            AllowOutOfOrderMetadataProperties = true,
+            AllowTrailingCommas = false,
+            DefaultBufferSize = 1024,
+            DefaultIgnoreCondition = global::System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+            RespectNullableAnnotations = true,
+            RespectRequiredConstructorParameters = false,
+            IgnoreReadOnlyFields = false,
+            IgnoreReadOnlyProperties = false,
+            IncludeFields = false,
+            MaxDepth = 64,
+            NewLine = "\n",
+            NumberHandling = global::System.Text.Json.Serialization.JsonNumberHandling.Strict,
+            PreferredObjectCreationHandling = global::System.Text.Json.Serialization.JsonObjectCreationHandling.Replace,
+            PropertyNameCaseInsensitive = false,
+            PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
+            ReadCommentHandling = global::System.Text.Json.JsonCommentHandling.Disallow,
+            UnknownTypeHandling = global::System.Text.Json.Serialization.JsonUnknownTypeHandling.JsonElement,
+            UnmappedMemberHandling = global::System.Text.Json.Serialization.JsonUnmappedMemberHandling.Skip,
+            WriteIndented = false,
+            IndentCharacter = ' ',
+            IndentSize = 2,
+        };
         
         private const global::System.Reflection.BindingFlags InstanceMemberBindingFlags =
             global::System.Reflection.BindingFlags.Instance |

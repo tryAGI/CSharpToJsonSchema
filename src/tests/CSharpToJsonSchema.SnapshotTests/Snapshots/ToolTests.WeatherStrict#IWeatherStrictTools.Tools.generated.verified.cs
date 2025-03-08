@@ -12,7 +12,7 @@ namespace CSharpToJsonSchema.IntegrationTests
             {
                 new global::CSharpToJsonSchema.Tool
                 {
-                    Name = "GetCurrentWeather",
+                    Name = "GetCurrentWeather2",
                     Description = "Get the current weather in a given location",
                     Strict = true,
                     Parameters = new global::CSharpToJsonSchema.OpenApiSchema
@@ -39,7 +39,7 @@ namespace CSharpToJsonSchema.IntegrationTests
 
                 new global::CSharpToJsonSchema.Tool
                 {
-                    Name = "GetCurrentWeatherAsync",
+                    Name = "GetCurrentWeatherAsync2",
                     Description = "Get the current weather in a given location",
                     Strict = true,
                     Parameters = new global::CSharpToJsonSchema.OpenApiSchema

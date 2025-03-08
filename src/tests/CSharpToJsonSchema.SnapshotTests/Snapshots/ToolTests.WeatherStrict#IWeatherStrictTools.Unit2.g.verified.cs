@@ -27,7 +27,8 @@ namespace CSharpToJsonSchema.IntegrationTests
         {
             if (!TryGetTypeInfoForRuntimeCustomConverter<global::CSharpToJsonSchema.IntegrationTests.Unit2>(options, out global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<global::CSharpToJsonSchema.IntegrationTests.Unit2> jsonTypeInfo))
             {
-                jsonTypeInfo = global::System.Text.Json.Serialization.Metadata.JsonMetadataServices.CreateValueInfo<global::CSharpToJsonSchema.IntegrationTests.Unit2>(options, global::System.Text.Json.Serialization.Metadata.JsonMetadataServices.GetEnumConverter<global::CSharpToJsonSchema.IntegrationTests.Unit2>(options));
+                global::System.Text.Json.Serialization.JsonConverter converter = ExpandConverter(typeof(global::CSharpToJsonSchema.IntegrationTests.Unit2), new global::System.Text.Json.Serialization.JsonStringEnumConverter<global::CSharpToJsonSchema.IntegrationTests.Unit2>(), options);
+                jsonTypeInfo = global::System.Text.Json.Serialization.Metadata.JsonMetadataServices.CreateValueInfo<global::CSharpToJsonSchema.IntegrationTests.Unit2> (options, converter);
             }
         
             jsonTypeInfo.OriginatingResolver = this;

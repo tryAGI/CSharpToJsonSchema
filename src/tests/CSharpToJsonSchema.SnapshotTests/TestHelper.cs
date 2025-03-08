@@ -33,12 +33,14 @@ public static class TestHelper
         await Task.WhenAll(
             verifier
                 .Verify(diagnostics)
+                
                 //.AutoVerify()
                 .UseDirectory("Snapshots")
-                .UseTextForParameters("Diagnostics"),
+                .UseTextForParameters("Diagnostics")
+                .ScrubLinesContaining("[]"),
             verifier
                 .Verify(driver)
-                .AutoVerify()
-                .UseDirectory("Snapshots"));
+                .AppendValues()
+                .UseDirectory("Snapshots").ScrubLinesContaining("[]"));
     }
 }

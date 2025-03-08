@@ -592,7 +592,7 @@ namespace CSharpToJsonSchema.Generators.JsonGen
                     NewLine = "\n",
                     NumberHandling = JsonNumberHandling.Strict,
                     PreferredObjectCreationHandling = JsonObjectCreationHandling.Replace,
-                    PropertyNameCaseInsensitive = false,
+                    PropertyNameCaseInsensitive = true,
                     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
                     ReadCommentHandling = JsonCommentHandling.Disallow,
                     ReferenceHandler = null,

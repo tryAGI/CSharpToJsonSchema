@@ -144,11 +144,19 @@ namespace CSharpToJsonSchema.IntegrationTests
             
             writer.WriteStartObject();
 
-            writer.WriteString(PropName_Location, ((global::CSharpToJsonSchema.IntegrationTests.Weather2)value).Location);
-            writer.WriteNumber(PropName_Temperature, ((global::CSharpToJsonSchema.IntegrationTests.Weather2)value).Temperature);
-            writer.WritePropertyName(PropName_Unit);
+            string __value_Location = ((global::CSharpToJsonSchema.IntegrationTests.Weather2)value).Location;
+            if (__value_Location is not null)
+            {
+                writer.WriteString(PropName_location, __value_Location);
+            }
+            writer.WriteNumber(PropName_temperature, ((global::CSharpToJsonSchema.IntegrationTests.Weather2)value).Temperature);
+            writer.WritePropertyName(PropName_unit);
             global::System.Text.Json.JsonSerializer.Serialize(writer, ((global::CSharpToJsonSchema.IntegrationTests.Weather2)value).Unit, Unit2);
-            writer.WriteString(PropName_Description, ((global::CSharpToJsonSchema.IntegrationTests.Weather2)value).Description);
+            string __value_Description = ((global::CSharpToJsonSchema.IntegrationTests.Weather2)value).Description;
+            if (__value_Description is not null)
+            {
+                writer.WriteString(PropName_description, __value_Description);
+            }
 
             writer.WriteEndObject();
         }
