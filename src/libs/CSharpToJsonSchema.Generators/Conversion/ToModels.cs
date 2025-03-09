@@ -33,8 +33,10 @@ public static class ToModels
                     IsVoid: x.ReturnsVoid || x.ReturnType.MetadataName == "Task",
                     IsStrict: isStrict,
                     Parameters: parameters.Select(static y => y).ToArray(),
-                    Descriptions: parameters.Select(static l => GetParameterDescriptions(l)).SelectMany(s=>s).ToDictionary(s=>s.Key,s=>s.Value)
-                    );
+                    Descriptions: parameters.Select(static l => GetParameterDescriptions(l)).SelectMany(s => s)
+                        .ToDictionary(s => s.Key, s => s.Value),
+                    ReturnType: x.ReturnType
+                );
             })
             .ToArray();
 
@@ -42,6 +44,39 @@ public static class ToModels
             Namespace: interfaceSymbol.ContainingNamespace.ToDisplayString(),
             Name: interfaceSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
             Methods: methods);
+    }
+
+    public static InterfaceData PrepareMethodData(
+        this IMethodSymbol interfaceSymbol,
+        AttributeData attributeData)
+    {
+        interfaceSymbol = interfaceSymbol ?? throw new ArgumentNullException(nameof(interfaceSymbol));
+        attributeData = attributeData ?? throw new ArgumentNullException(nameof(attributeData));
+
+        var isStrict = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "Strict").Value.Value is bool strict &&
+                       strict;
+        var x = interfaceSymbol;
+        var parameters = x.Parameters
+            //.Where(static x => x.Type.MetadataName != "CancellationToken")
+            .ToArray();
+
+        var methodData = new MethodData(
+            Name: x.Name,
+            Description: GetDescription(x),
+            IsAsync: x.IsAsync || x.ReturnType.Name == "Task",
+            IsVoid: x.ReturnsVoid || x.ReturnType.MetadataName == "Task",
+            IsStrict: isStrict,
+            Parameters: parameters.Select(static y => y).ToArray(),
+            Descriptions: parameters.Select(static l => GetParameterDescriptions(l)).SelectMany(s => s)
+                .ToDictionary(s => s.Key, s => s.Value),
+            ReturnType:x.ReturnType
+        );
+
+
+        return new InterfaceData(
+            Namespace: interfaceSymbol.ContainingNamespace.ToDisplayString(),
+            Name: "I"+interfaceSymbol.Name,
+            Methods: [methodData]);
     }
 
     // private static Dictionary<string, bool> GetIsRequired(IParameterSymbol[] parameters, Dictionary<string, bool>? dics = null)
@@ -68,11 +103,12 @@ public static class ToModels
     //     //parameter.GetAttributes().OfType<global::System.ComponentModel.D.RequiredAttribute>()
     // }
 
-    private static List<KeyValuePair<string, string>> GetParameterDescriptions(IParameterSymbol parameters, Dictionary<string,string>? dics = null)
+    private static List<KeyValuePair<string, string>> GetParameterDescriptions(IParameterSymbol parameters,
+        Dictionary<string, string>? dics = null)
     {
         dics ??= new Dictionary<string, string>();
 
-        
+
         if (dics.TryAdd(parameters.Name.ToCamelCase(), GetDescription(parameters)))
         {
             if (parameters is IParameterSymbol namedTypeSymbol)
@@ -83,16 +119,17 @@ public static class ToModels
 
         return dics.Select(x => new KeyValuePair<string, string>(x.Key, x.Value)).ToList();
     }
-    
-    private static Dictionary<string, string> GetParameterDescriptions(IPropertySymbol[] parameters, Dictionary<string,string>? dics = null)
+
+    private static Dictionary<string, string> GetParameterDescriptions(IPropertySymbol[] parameters,
+        Dictionary<string, string>? dics = null)
     {
         dics ??= new Dictionary<string, string>();
 
         foreach (var parameter in parameters)
         {
             var description = GetDescription(parameter);
-            if(string.IsNullOrWhiteSpace(description)) continue;
-            
+            if (string.IsNullOrWhiteSpace(description)) continue;
+
             if (dics.TryAdd(parameter.Name, description))
             {
                 if (parameter is IPropertySymbol namedTypeSymbol)
@@ -102,10 +139,12 @@ public static class ToModels
                 }
             }
         }
+
         return dics;
     }
 
-    private static OpenApiSchema ToParameterData(ITypeSymbol typeSymbol, string? name = null, string? description = null, bool isRequired = true)
+    private static OpenApiSchema ToParameterData(ITypeSymbol typeSymbol, string? name = null,
+        string? description = null, bool isRequired = true)
     {
         string schemaType;
         string? format = null;
@@ -116,7 +155,7 @@ public static class ToModels
             case TypeKind.Enum:
                 schemaType = "string";
                 break;
-            
+
             case TypeKind.Structure:
                 switch (typeSymbol.SpecialType)
                 {
@@ -124,31 +163,31 @@ public static class ToModels
                         schemaType = "integer";
                         format = "int32";
                         break;
-                    
+
                     case SpecialType.System_Int64:
                         schemaType = "integer";
                         format = "int64";
                         break;
-                    
+
                     case SpecialType.System_Single:
                         schemaType = "number";
                         format = "double";
                         break;
-                    
+
                     case SpecialType.System_Double:
                         schemaType = "number";
                         format = "float";
                         break;
-                    
+
                     case SpecialType.System_DateTime:
                         schemaType = "string";
                         format = "date-time";
                         break;
-                    
+
                     case SpecialType.System_Boolean:
                         schemaType = "boolean";
                         break;
-                    
+
                     case SpecialType.None:
                         switch (typeSymbol.Name)
                         {
@@ -156,25 +195,27 @@ public static class ToModels
                                 schemaType = "string";
                                 format = "date";
                                 break;
-                            
+
                             default:
                                 throw new NotImplementedException($"{typeSymbol.Name} is not implemented.");
                         }
+
                         break;
-                    
+
                     default:
                         throw new NotImplementedException($"{typeSymbol.SpecialType} is not implemented.");
                 }
+
                 break;
-            
+
             case TypeKind.Class:
                 switch (typeSymbol.SpecialType)
                 {
                     case SpecialType.System_String:
                         schemaType = "string";
                         break;
-                    
-                    
+
+
                     case SpecialType.None:
                         schemaType = "object";
                         properties = typeSymbol.GetMembers()
@@ -186,28 +227,29 @@ public static class ToModels
                                 isRequired: true))
                             .ToArray();
                         break;
-                    
+
                     default:
                         throw new NotImplementedException($"{typeSymbol.SpecialType} is not implemented.");
                 }
+
                 break;
-            
+
             case TypeKind.Interface when typeSymbol.MetadataName == "IReadOnlyCollection`1":
                 schemaType = "array";
                 arrayItem = (typeSymbol as INamedTypeSymbol)?.TypeArguments
                     .Select(static y => ToParameterData(y))
                     .FirstOrDefault();
                 break;
-            
+
             case TypeKind.Array:
                 schemaType = "array";
                 arrayItem = ToParameterData((typeSymbol as IArrayTypeSymbol)?.ElementType!);
                 break;
-            
+
             default:
                 throw new NotImplementedException($"{typeSymbol.TypeKind} is not implemented.");
         }
-        
+
         return new OpenApiSchema(
             Name: !string.IsNullOrWhiteSpace(name)
                 ? name!
@@ -231,13 +273,14 @@ public static class ToModels
             IsNullable: IsNullable(typeSymbol),
             IsRequired: isRequired);
     }
-    
+
     private static bool IsNullable(ITypeSymbol typeSymbol)
     {
         if (typeSymbol.TypeKind == TypeKind.Enum)
         {
             return false;
         }
+
         if (typeSymbol.TypeKind == TypeKind.Structure)
         {
             return false;
@@ -249,14 +292,14 @@ public static class ToModels
             _ => true,
         };
     }
-    
+
     public static string GetDefaultValue(this ITypeSymbol typeSymbol)
     {
         switch (typeSymbol.SpecialType)
         {
             case SpecialType.System_String:
                 return "string.Empty";
-                    
+
             default:
                 return string.Empty;
         }

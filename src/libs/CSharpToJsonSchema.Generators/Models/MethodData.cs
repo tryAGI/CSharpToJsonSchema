@@ -9,6 +9,7 @@ public readonly record struct MethodData(
     bool IsVoid,
     bool IsStrict,
     IParameterSymbol[] Parameters,
-    Dictionary<string, string> Descriptions);
+    Dictionary<string, string> Descriptions,
+    ITypeSymbol ReturnType);
     
 public readonly record struct PropertyMetadata(string Name, string Description, bool IsRequired);

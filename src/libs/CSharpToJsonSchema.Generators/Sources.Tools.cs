@@ -90,6 +90,40 @@ namespace {@interface.Namespace}
     }}
 }}";
     }
+    
+    public static string GenerateFunctionToolClientImplementation(InterfaceData @interface)
+    {
+        var extensionsClassName = @interface.Name.Substring(startIndex: 1) + "Extensions";
+
+        return @$"
+#nullable enable
+
+namespace {@interface.Namespace}
+{{
+    public static partial class {extensionsClassName}
+    {{
+        public static global::CSharpToJsonSchema.Tool AsTool(this Func<{GetInputsTypes(@interface.Methods.First())}> functions)
+        {{
+            {@interface.Methods.Select(method => $@"
+                return new global::CSharpToJsonSchema.Tool
+                {{
+                    Name = ""{method.Name}"",
+                    Description = ""{method.Description}"",
+                    Strict = {(method.IsStrict ? "true" : "false")},
+                    Parameters = null
+                }};
+            ").Inject()}
+        }}
+    }}
+}}";
+    }
+
+    private static string GetInputsTypes(MethodData first)
+    {
+        var f = first.Parameters.Select(s => s.Type.ToDisplayString()).ToList();
+        f.Add(first.ReturnType.ToDisplayString());
+        return string.Join(", ", f);
+    }
 
     private static string GetDictionaryString(MethodData data)
     {

@@ -112,7 +112,7 @@ public static class SchemaBuilder
         var typeInfo = type;
         
         var dics = JsonSerializer.Deserialize(descriptionString,OpenApiSchemaJsonContext.Default.IDictionaryStringString);
-      
+        List<string> required = new List<string>();
         var x = ConvertToCompatibleSchemaSubset(typeInfo.GetJsonSchemaAsNode(exporterOptions:new JsonSchemaExporterOptions()
         {
             TransformSchemaNode = (a, b) =>
@@ -128,7 +128,7 @@ public static class SchemaBuilder
             },
         }));
 
-        List<string> required = new List<string>();
+        
         foreach (var re in x.Properties)
         {
             required.Add(re.Key);

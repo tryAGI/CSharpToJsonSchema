@@ -3,7 +3,6 @@ namespace CSharpToJsonSchema.SnapshotTests;
 [TestClass]
 public class ToolTests : VerifyBase
 {
-    
     [TestMethod]
     public Task Weather()
     {
