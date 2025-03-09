@@ -117,4 +117,12 @@ public class JsonSerializationTests
         deserialized.Details.Numbers.Should().BeEquivalentTo(args.Details.Numbers);
 
     }
+
+    [Fact]
+    public void ShouldCreateToolWithComplexStudentClass()
+    {
+        var service = new StudenRecordService();
+        var tools = service.AsTools();
+        
+    }
 }

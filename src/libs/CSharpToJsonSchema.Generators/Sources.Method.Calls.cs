@@ -1,14 +1,13 @@
-using CSharpToJsonSchema.Generators.Conversion;
+﻿using CSharpToJsonSchema.Generators.Conversion;
 using CSharpToJsonSchema.Generators.JsonGen.Helpers;
 using CSharpToJsonSchema.Generators.Models;
-using H.Generators;
 using H.Generators.Extensions;
 
 namespace CSharpToJsonSchema.Generators;
 
-internal static partial class Sources
+public class Sources_Method_Calls
 {
-    public static string GenerateCalls(InterfaceData @interface)
+     public static string GenerateCalls(InterfaceData @interface)
     {
         var extensionsClassName = @interface.Name.Substring(startIndex: 1) + "Extensions";
         var res = @$"#nullable enable
@@ -62,7 +61,6 @@ namespace {@interface.Namespace}
         }}
 
 {@interface.Methods.Select(method => $@"
-        #pragma warning disable IL2026, IL3050
         public static {method.Name}Args As{method.Name}Args(
             this {@interface.Name} functions,
             string json)
@@ -70,14 +68,14 @@ namespace {@interface.Namespace}
             #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {{
-               
+                #pragma disable warning IL2026, IL3050
                 return global::System.Text.Json.JsonSerializer.Deserialize<{method.Name}Args>(json, new global::System.Text.Json.JsonSerializerOptions
                 {{
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{{{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}}}
                 }}) ??
                 throw new global::System.InvalidOperationException(""Could not deserialize JSON."");
-               
+                #pragma restore warning IL2026, IL3050
             }}
             else
             {{
@@ -94,11 +92,9 @@ namespace {@interface.Namespace}
                 throw new global::System.InvalidOperationException(""Could not deserialize JSON."");
             #endif
         }}
-        #pragma warning restore IL2026, IL3050
 ").Inject()}
 
 {@interface.Methods.Where(static x => x is { IsAsync: false, IsVoid: false }).Select(method => $@"
-        #pragma warning disable IL2026, IL3050
         public static string Call{method.Name}(this {@interface.Name} functions, string json)
         {{
             var args = functions.As{method.Name}Args(json);
@@ -107,13 +103,13 @@ namespace {@interface.Namespace}
      #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {{
-                
+                #pragma disable warning IL2026, IL3050
                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
                 {{
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
                 }});
-                
+                #pragma restore warning IL2026, IL3050  
             }}
             else
             {{
@@ -127,7 +123,6 @@ namespace {@interface.Namespace}
                 }});
             #endif            
         }}
-        #pragma warning restore IL2026, IL3050 
 ").Inject()}
 {@interface.Methods.Where(static x => x is { IsAsync: false, IsVoid: true }).Select(method => $@"
         public static void Call{method.Name}(this {@interface.Name} functions, string json)
@@ -138,7 +133,6 @@ namespace {@interface.Namespace}
 ").Inject()}
 
 {@interface.Methods.Where(static x => x is { IsAsync: true, IsVoid: false }).Select(method => $@"
-        #pragma warning disable IL2026, IL3050
         public static async global::System.Threading.Tasks.Task<string> Call{method.Name}(
             this {@interface.Name} functions,
             string json,
@@ -151,12 +145,13 @@ namespace {@interface.Namespace}
            #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {{
-                
+                #pragma disable warning IL2026, IL3050
                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
                 {{
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
-                }});                
+                }});
+                #pragma restore warning IL2026, IL3050
             }}
             else
             {{
@@ -171,7 +166,7 @@ namespace {@interface.Namespace}
             #endif
             
         }}
-        #pragma warning restore IL2026, IL3050
+        
 ").Inject()}
 
 {@interface.Methods.Where(static x => x is { IsAsync: true, IsVoid: true }).Select(method => $@"
