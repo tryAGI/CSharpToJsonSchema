@@ -1,4 +1,6 @@
-﻿using CSharpToJsonSchema.Generators.Models;
+﻿using System.Text;
+using CSharpToJsonSchema.Generators.Conversion;
+using CSharpToJsonSchema.Generators.Models;
 using H.Generators;
 using H.Generators.Extensions;
 
@@ -80,12 +82,26 @@ namespace {@interface.Namespace}
                     Name = ""{method.Name}"",
                     Description = ""{method.Description}"",
                     Strict = {(method.IsStrict ? "true" : "false")},
-                    Parameters = {GenerateOpenApiSchema(method.Parameters)},
+                    Parameters = global::CSharpToJsonSchema.SchemaBuilder.ConvertToSchema(global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.{method.Name}Args,{"\""}{GetDictionaryString(method)}{"\""}),
                 }},
 ").Inject()}
             }};
         }}
     }}
 }}";
+    }
+
+    private static string GetDictionaryString(MethodData data)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        var methodDescriptions = data.Descriptions;
+        methodDescriptions.Add("MainFunction_Desc", data.Description);
+        sb.Append("{");
+        var lst = methodDescriptions.Select(s => $"\"{s.Key.ToCamelCase()}\":\"{s.Value}\"");
+        sb.Append(string.Join(", ", lst));
+        sb.Append("}");
+        
+        return sb.ToString().Replace("\"","\\\"");
     }
 }

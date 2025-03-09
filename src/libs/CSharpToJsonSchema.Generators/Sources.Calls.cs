@@ -1,3 +1,5 @@
+using CSharpToJsonSchema.Generators.Conversion;
+using CSharpToJsonSchema.Generators.JsonGen.Helpers;
 using CSharpToJsonSchema.Generators.Models;
 using H.Generators;
 using H.Generators.Extensions;
@@ -16,7 +18,9 @@ namespace {@interface.Namespace}
 {@interface.Methods.Select(static method => $@"
     public class {method.Name}Args
     {{
-         {string.Join("\n         ", method.Parameters.Properties.Select(static x => $@"public {x.Type}{(x.IsNullable ? "?" : "")} {x.Name.ToPropertyName()} {{ get; set; }}{(!string.IsNullOrEmpty(x.DefaultValue) ? $" = {x.DefaultValue};" : "")}"))}
+         
+         {string.Join("\n         ", method.Parameters.Select(static x => $@"[global::System.ComponentModel.Description({"\""}{ToModels.GetDescription(x)}{"\""})]
+          public {x.Type.ToDisplayString()}{(x.Type.IsNullableType() ? "?" : "")} {x.Name.ToPropertyName()} {{ get; set; }}{(!string.IsNullOrEmpty(ToModels.GetDefaultValue(x.Type)) ? $" = {ToModels.GetDefaultValue(x.Type)};" : "")}"))}
     }}
 ").Inject()}
 
@@ -95,7 +99,7 @@ namespace {@interface.Namespace}
         public static string Call{method.Name}(this {@interface.Name} functions, string json)
         {{
             var args = functions.As{method.Name}Args(json);
-            var jsonResult = functions.{method.Name}({string.Join(", ", method.Parameters.Properties.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
+            var jsonResult = functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
 
      #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
@@ -125,7 +129,7 @@ namespace {@interface.Namespace}
         public static void Call{method.Name}(this {@interface.Name} functions, string json)
         {{
             var args = functions.As{method.Name}Args(json);
-            functions.{method.Name}({string.Join(", ", method.Parameters.Properties.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
+            functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
         }}
 ").Inject()}
 
@@ -136,7 +140,7 @@ namespace {@interface.Namespace}
             global::System.Threading.CancellationToken cancellationToken = default)
         {{
             var args = functions.As{method.Name}Args(json);
-            var jsonResult = await functions.{method.Name}({string.Join(", ", method.Parameters.Properties
+            var jsonResult = await functions.{method.Name}({string.Join(", ", method.Parameters
                 .Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}").Append("cancellationToken"))});
 
            #if NET6_0_OR_GREATER
@@ -173,7 +177,7 @@ namespace {@interface.Namespace}
             global::System.Threading.CancellationToken cancellationToken = default)
         {{
             var args = functions.As{method.Name}Args(json);
-            await functions.{method.Name}({string.Join(", ", method.Parameters.Properties.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))}, cancellationToken);
+            await functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))}, cancellationToken);
 
             return string.Empty;
         }}

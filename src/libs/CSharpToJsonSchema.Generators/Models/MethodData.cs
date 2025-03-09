@@ -1,3 +1,5 @@
+using Microsoft.CodeAnalysis;
+
 namespace CSharpToJsonSchema.Generators.Models;
 
 public readonly record struct MethodData(
@@ -6,4 +8,7 @@ public readonly record struct MethodData(
     bool IsAsync,
     bool IsVoid,
     bool IsStrict,
-    OpenApiSchema Parameters);
+    IParameterSymbol[] Parameters,
+    Dictionary<string, string> Descriptions);
+    
+public readonly record struct PropertyMetadata(string Name, string Description, bool IsRequired);

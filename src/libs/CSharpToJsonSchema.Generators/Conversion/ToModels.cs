@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using CSharpToJsonSchema.Generators.JsonGen.Helpers;
 using CSharpToJsonSchema.Generators.Models;
 using Microsoft.CodeAnalysis;
 
@@ -24,31 +25,16 @@ public static class ToModels
                 var parameters = x.Parameters
                     .Where(static x => x.Type.MetadataName != "CancellationToken")
                     .ToArray();
-                
+
                 return new MethodData(
                     Name: x.Name,
                     Description: GetDescription(x),
                     IsAsync: x.IsAsync || x.ReturnType.Name == "Task",
                     IsVoid: x.ReturnsVoid || x.ReturnType.MetadataName == "Task",
                     IsStrict: isStrict,
-                    Parameters: new OpenApiSchema(
-                        Name: x.Name,
-                        Description: GetDescription(x),
-                        Type: "object",
-                        SchemaType: "object",
-                        Properties: parameters
-                            .Select(y => ToParameterData(
-                                typeSymbol: y.Type,
-                                name: y.Name,
-                                description: GetDescription(y),
-                                isRequired: isStrict || !y.IsOptional))
-                            .ToArray(),
-                        EnumValues: Array.Empty<string>(),
-                        IsNullable: false,
-                        IsRequired: true,
-                        Format: null,
-                        ArrayItem: Array.Empty<OpenApiSchema>(),
-                        DefaultValue: string.Empty));
+                    Parameters: parameters.Select(static y => y).ToArray(),
+                    Descriptions: parameters.Select(static l => GetParameterDescriptions(l)).SelectMany(s=>s).ToDictionary(s=>s.Key,s=>s.Value)
+                    );
             })
             .ToArray();
 
@@ -57,7 +43,68 @@ public static class ToModels
             Name: interfaceSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
             Methods: methods);
     }
+
+    // private static Dictionary<string, bool> GetIsRequired(IParameterSymbol[] parameters, Dictionary<string, bool>? dics = null)
+    // {
+    //     dics ??= new Dictionary<string, bool>();
+    //
+    //     foreach (var parameter in parameters)
+    //     {
+    //         if (dics.TryAdd(parameter.Name, IsRequired(parameter)))
+    //         {
+    //             if (parameter is IParameterSymbol namedTypeSymbol)
+    //             {
+    //                 GetIsRequired(namedTypeSymbol.Type.GetMembers().OfType<IPropertySymbol>().ToArray(),dics)
+    //             }
+    //         }
+    //     }
+    //
+    //     return dics;
+    // }
+    //
+    // private static bool IsRequired(ISymbol parameter)
+    // {
+    //     return false;
+    //     //parameter.GetAttributes().OfType<global::System.ComponentModel.D.RequiredAttribute>()
+    // }
+
+    private static List<KeyValuePair<string, string>> GetParameterDescriptions(IParameterSymbol parameters, Dictionary<string,string>? dics = null)
+    {
+        dics ??= new Dictionary<string, string>();
+
+        
+        if (dics.TryAdd(parameters.Name.ToCamelCase(), GetDescription(parameters)))
+        {
+            if (parameters is IParameterSymbol namedTypeSymbol)
+            {
+                GetParameterDescriptions(namedTypeSymbol.Type.GetMembers().OfType<IPropertySymbol>().ToArray(), dics);
+            }
+        }
+
+        return dics.Select(x => new KeyValuePair<string, string>(x.Key, x.Value)).ToList();
+    }
     
+    private static Dictionary<string, string> GetParameterDescriptions(IPropertySymbol[] parameters, Dictionary<string,string>? dics = null)
+    {
+        dics ??= new Dictionary<string, string>();
+
+        foreach (var parameter in parameters)
+        {
+            var description = GetDescription(parameter);
+            if(string.IsNullOrWhiteSpace(description)) continue;
+            
+            if (dics.TryAdd(parameter.Name, description))
+            {
+                if (parameter is IPropertySymbol namedTypeSymbol)
+                {
+                    GetParameterDescriptions(namedTypeSymbol.Type.GetMembers().OfType<IPropertySymbol>().ToArray(),
+                        dics);
+                }
+            }
+        }
+        return dics;
+    }
+
     private static OpenApiSchema ToParameterData(ITypeSymbol typeSymbol, string? name = null, string? description = null, bool isRequired = true)
     {
         string schemaType;
@@ -203,7 +250,7 @@ public static class ToModels
         };
     }
     
-    private static string GetDefaultValue(ITypeSymbol typeSymbol)
+    public static string GetDefaultValue(this ITypeSymbol typeSymbol)
     {
         switch (typeSymbol.SpecialType)
         {
@@ -215,7 +262,7 @@ public static class ToModels
         }
     }
 
-    private static string GetDescription(ISymbol symbol)
+    public static string GetDescription(ISymbol symbol)
     {
         return symbol.GetAttributes()
             .FirstOrDefault(static x => x.AttributeClass?.Name == nameof(DescriptionAttribute))?
