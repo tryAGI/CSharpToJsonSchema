@@ -91,7 +91,6 @@ public partial class MeaiFunction : AIFunction
             }
             else if (args.Value is JsonNode node)
             {
-                jsonObject[args.Key] = node;
             }
         }
 

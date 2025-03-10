@@ -52,7 +52,7 @@ public static class TypeToSchemaHelpers
         JsonSerializerOptions? options = null)
     {
         type = type ?? throw new ArgumentNullException(nameof(type));
-
+#pragma warning disable IL2026
         var node = new JsonSerializerOptions
         {
             TypeInfoResolver = jsonTypeInfoResolver ?? new DefaultJsonTypeInfoResolver(),
@@ -61,7 +61,7 @@ public static class TypeToSchemaHelpers
             TransformSchemaNode = (context, node) => node,
             TreatNullObliviousAsNonNullable = true,
         });
-        
+#pragma warning restore IL2026 
         var schema = Create(type, strict);
         if (schema.Type == "object")
         {
