@@ -17,6 +17,14 @@ internal static partial class Sources
 
 namespace {@interface.Namespace}
 {{
+
+
+
+
+
+
+
+
 {@interface.Methods.Select(static method => $@"
     public class {method.Name}Args
     {{         

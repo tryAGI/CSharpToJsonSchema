@@ -18,12 +18,12 @@ namespace {@interface.Namespace}
 {{
     public partial class {extensionsClassName}
     {{               
-        public static implicit operator global::GenerativeAI.Tools.GenericFunctionTool ({@interface.Namespace}.{extensionsClassName} tools)
+        public static implicit operator global::GenerativeAI.Core.GoogleFunctionTool ({@interface.Namespace}.{extensionsClassName} tools)
         {{
             return tools.AsGoogleFunctionTool();
         }}   
 
-        public global::GenerativeAI.Tools.GenericFunctionTool AsGoogleFunctionTool()
+        public global::GenerativeAI.Core.GoogleFunctionTool AsGoogleFunctionTool()
         {{
             return new global::GenerativeAI.Tools.GenericFunctionTool(this.AsTools(), this.AsCalls());
         }}
@@ -42,9 +42,9 @@ namespace {@interface.Namespace}
 
 namespace {@interface.Namespace}
 {{
-    public partial class {extensionsClassName}
+    public static partial class {extensionsClassName}
     {{    
-        public global::GenerativeAI.Core.IFunctionTool AsGoogleFunctionTool(this {@interface.Name} service)
+        public static global::GenerativeAI.Core.IFunctionTool AsGoogleFunctionTool(this {@interface.Name} service)
         {{
             return new global::GenerativeAI.Tools.GenericFunctionTool(service.AsTools(), service.AsCalls());
         }}

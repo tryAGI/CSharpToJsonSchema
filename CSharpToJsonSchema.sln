@@ -42,6 +42,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpToJsonSchema.Integrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpToJsonSchema.AotTests", "src\tests\CSharpToJsonSchema.AotTests\CSharpToJsonSchema.AotTests.csproj", "{6167F915-83EB-42F9-929B-AD4719A55811}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpToJsonSchema.MeaiTests", "src\tests\CSharpToJsonSchema.MeaiTests\CSharpToJsonSchema.MeaiTests.csproj", "{DC07C90E-A58C-44B3-82D2-E2EB8F777B92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{6167F915-83EB-42F9-929B-AD4719A55811}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6167F915-83EB-42F9-929B-AD4719A55811}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6167F915-83EB-42F9-929B-AD4719A55811}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC07C90E-A58C-44B3-82D2-E2EB8F777B92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC07C90E-A58C-44B3-82D2-E2EB8F777B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC07C90E-A58C-44B3-82D2-E2EB8F777B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC07C90E-A58C-44B3-82D2-E2EB8F777B92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{8AFCC30C-C59D-498D-BE68-9A328B3E5599} = {AAA11B78-2764-4520-A97E-46AA7089A588}
 		{247C813A-9072-4DF3-B403-B35E3688DB4B} = {AAA11B78-2764-4520-A97E-46AA7089A588}
 		{6167F915-83EB-42F9-929B-AD4719A55811} = {AAA11B78-2764-4520-A97E-46AA7089A588}
+		{DC07C90E-A58C-44B3-82D2-E2EB8F777B92} = {AAA11B78-2764-4520-A97E-46AA7089A588}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CED9A020-DBA5-4BE6-8096-75E528648EC1}

@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup Label="Base packages">
+        <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="H.Generators.Tests.Extensions" Version="1.24.2" />
+        <PackageReference Include="H.Resources.Generator" Version="1.8.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.AI" Version="9.3.0-preview.1.25114.11" />
+        <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.3.0-preview.1.25114.11" />
+        <PackageReference Include="MSTest" Version="3.8.2" />
+        <PackageReference Include="FluentAssertions" Version="8.1.1" />
+    </ItemGroup>    
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.MSTest" Version="1.1.2" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.13.0" />
+        <PackageReference Include="Verify.MSTest" Version="28.13.0" />
+        <PackageReference Include="Verify.SourceGenerators" Version="2.5.0" />
+    </ItemGroup>
+
+    <ItemGroup Label="GlobalUsings">
+        <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+        <Using Include="FluentAssertions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\libs\CSharpToJsonSchema.Generators\CSharpToJsonSchema.Generators.csproj" OutputItemType="analyzer" />
+        <ProjectReference Include="..\..\libs\CSharpToJsonSchema\CSharpToJsonSchema.csproj" />
+    </ItemGroup>
+
+    
+
+</Project>

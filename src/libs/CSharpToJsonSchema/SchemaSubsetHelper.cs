@@ -110,39 +110,48 @@ public static class SchemaBuilder
     public static OpenApiSchema ConvertToSchema(JsonTypeInfo type, string descriptionString)
     {
         var typeInfo = type;
-        
-        var dics = JsonSerializer.Deserialize(descriptionString,OpenApiSchemaJsonContext.Default.IDictionaryStringString);
-        List<string> required = new List<string>();
-        var x = ConvertToCompatibleSchemaSubset(typeInfo.GetJsonSchemaAsNode(exporterOptions:new JsonSchemaExporterOptions()
-        {
-            TransformSchemaNode = (a, b) =>
-            {
-                if (a.PropertyInfo == null)
-                    return b;
-                var propName = ToCamelCase(a.PropertyInfo.Name);
-                if (dics.ContainsKey(propName))
-                {
-                    b["description"] = dics[propName];
-                }
-                return b;
-            },
-        }));
 
-        
+        var dics = JsonSerializer.Deserialize(descriptionString,
+            OpenApiSchemaJsonContext.Default.IDictionaryStringString);
+        List<string> required = new List<string>();
+        var x = ConvertToCompatibleSchemaSubset(typeInfo.GetJsonSchemaAsNode(
+            exporterOptions: new JsonSchemaExporterOptions()
+            {
+                TransformSchemaNode = (a, b) =>
+                {
+                    if (a.TypeInfo.Type.IsEnum)
+                    {
+                        b["type"] = "string";
+                    }
+
+                    if (a.PropertyInfo == null)
+                        return b;
+                    var propName = ToCamelCase(a.PropertyInfo.Name);
+                    if (dics.ContainsKey(propName))
+                    {
+                        b["description"] = dics[propName];
+                    }
+
+                    return b;
+                },
+            }));
+
+
         foreach (var re in x.Properties)
         {
             required.Add(re.Key);
         }
-
-        var mainDescription =x.Description ?? dics["mainFunction_Desc"];
+       
+        var mainDescription = x.Description ?? (dics.TryGetValue("mainFunction_Desc", out var desc) ? desc : "");
         return new OpenApiSchema()
         {
             Description = mainDescription,
             Properties = x.Properties,
-            Required = required
+            Required = required,
+            Type = "object"
         };
     }
-    
+
     public static string ToCamelCase(string str)
     {
         if (!string.IsNullOrEmpty(str) && str.Length > 1)
