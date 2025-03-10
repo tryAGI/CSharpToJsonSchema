@@ -6,12 +6,14 @@
 [![Discord](https://img.shields.io/discord/1115206893015662663?label=Discord&logo=discord&logoColor=white&color=d82679)](https://discord.gg/Ca2xhfBf3v)
 
 ## Features 🔥
-- Source generator to define functions natively through C# interfaces
+- Source generator to define functions natively through C# interfaces and individual methods
 - Doesn't use Reflection
 - All modern .NET features - nullability, trimming, NativeAOT, etc.
 - Tested for compatibility with OpenAI/Ollama/Anthropic/LangChain/Gemini
 
 ## Usage
+
+### Interface 
 ```csharp
 using CSharpToJsonSchema;
 
@@ -55,6 +57,32 @@ public class WeatherService : IWeatherFunctions
 
 var tools = service.AsTools();
 ```
+
+### Methods
+
+```csharp
+
+[FunctionTool]
+public Task<Weather> GetCurrentWeatherAsync(string location, Unit unit = Unit.Celsius, CancellationToken cancellationToken = default)
+{
+    return Task.FromResult(new Weather
+    {
+        Location = location,
+        Temperature = 22.0,
+        Unit = unit,
+        Description = "Sunny",
+    });
+}
+
+var tools = new Tools([GetCurrentWeatherAsync])
+
+//Access list of CSharpToJsonSchema.Tool
+var myTools = tools.AvailableTools
+
+//Implicit Conversion to list of CSharpToJsonSchema.Tool
+List<Tool> myTools = tools
+```
+
 
 ## Support
 
