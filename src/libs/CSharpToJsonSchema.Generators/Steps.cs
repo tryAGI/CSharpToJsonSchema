@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -43,7 +44,7 @@ public static class CommonSteps
                     ClassSymbol: (INamedTypeSymbol)context.TargetSymbol)));
     }
     
-    public static IncrementalValuesProvider<(SemanticModel SemanticModel, AttributeData AttributeData, MethodDeclarationSyntax InterfaceSyntax, IMethodSymbol InterfaceSymbol)>
+    public static IncrementalValueProvider<ImmutableArray<(SemanticModel SemanticModel, AttributeData AttributeData, MethodDeclarationSyntax InterfaceSyntax, IMethodSymbol InterfaceSymbol)>>
         SelectManyAllAttributesOfCurrentMethodSyntax(
             this IncrementalValuesProvider<GeneratorAttributeSyntaxContext> source)
     {
@@ -56,7 +57,7 @@ public static class CommonSteps
                     AttributeData: x,
                     ClassSyntax: (MethodDeclarationSyntax)context.TargetNode,
                     ClassSymbol: (IMethodSymbol)context.TargetSymbol)
-                ));
+                )).Collect();
         return items;
     }
 }

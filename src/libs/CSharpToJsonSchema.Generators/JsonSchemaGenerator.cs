@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using CSharpToJsonSchema.Generators.Conversion;
 using CSharpToJsonSchema.Generators.JsonGen;
 using H.Generators;
@@ -27,7 +28,7 @@ public class JsonSchemaGenerator : IIncrementalGenerator
         ProcessInterfaces(context);
         
         //Process Methods
-       // ProcessMethods(context);
+        ProcessMethods(context);
     }
 
     private void ProcessMethods(IncrementalGeneratorInitializationContext context)
@@ -42,12 +43,12 @@ public class JsonSchemaGenerator : IIncrementalGenerator
             .SelectAndReportExceptions(AsFunctionTools, context, Id)
             .AddSource(context);
         
-        // attributes
-        //     .SelectAndReportExceptions(AsCalls, context, Id)
-        //     .AddSource(context);
+        attributes
+            .SelectAndReportExceptions(AsFunctionCalls, context, Id)
+            .AddSource(context);
         
-        // var generator = new JsonSourceGenerator();
-        // generator.Initialize2(context);
+        var generator = new JsonSourceGenerator();
+        generator.InitializeForFunctionTools(context);
     }
 
     private void ProcessInterfaces(IncrementalGeneratorInitializationContext context)
@@ -80,11 +81,10 @@ public class JsonSchemaGenerator : IIncrementalGenerator
     }
     
     private static InterfaceData PrepareMethodData(
-        (SemanticModel SemanticModel, AttributeData AttributeData, MethodDeclarationSyntax InterfaceSyntax, IMethodSymbol InterfaceSymbol) tuple)
+        ImmutableArray<(SemanticModel SemanticModel, AttributeData AttributeData, MethodDeclarationSyntax InterfaceSyntax, IMethodSymbol InterfaceSymbol)> list)
     {
-        var (_, attributeData, _, interfaceSymbol) = tuple;
-
-        return interfaceSymbol.PrepareMethodData(attributeData);
+        var lst = list.Select(s => (s.InterfaceSymbol, s.AttributeData)).ToList();
+        return ToModels.PrepareMethodData(lst);
     }
 
     private static FileWithName AsTools(InterfaceData @interface)
@@ -105,6 +105,12 @@ public class JsonSchemaGenerator : IIncrementalGenerator
         return new FileWithName(
             Name: $"{@interface.Name}.Calls.generated.cs",
             Text: Sources.GenerateCalls(@interface));
+    }
+    private static FileWithName AsFunctionCalls(InterfaceData @interface)
+    {
+        return new FileWithName(
+            Name: $"{@interface.Name}.FunctionCalls.generated.cs",
+            Text: Sources.GenerateFunctionCalls(@interface));
     }
     
    
