@@ -1,4 +1,5 @@
-﻿using CSharpToJsonSchema.Generators.Models;
+﻿using CSharpToJsonSchema.Generators.Conversion;
+using CSharpToJsonSchema.Generators.Models;
 using H.Generators.Extensions;
 using Microsoft.CodeAnalysis;
 
@@ -28,7 +29,7 @@ internal static partial class Sources
 namespace {@interface.Namespace}
 {{
     public partial class {extensionsClassName}
-    {{
+    {{                 
         static {extensionsClassName}()
         {{
             AddAllTools();
@@ -66,14 +67,16 @@ namespace {@interface.Namespace}
             AvailableTools.Add(newTool);
             if(Delegates.ContainsKey(name))
                 throw new global::System.Exception({"$\"Function {name} is already registered\""});
-            Delegates.Add(name, tool);
+            Delegates.Add(name, tool); 
+           
         }}   
 
         public Tools(global::System.Delegate[] tools)
         {{
-            foreach (var tool in tools)
+            for(int i = 0; i < tools.Length; i++)
             {{
-                 AddTool(tool);  
+                var x = tools[i]; 
+                AddTool(x);
             }}
         }}
         
@@ -86,13 +89,21 @@ namespace {@interface.Namespace}
         {{
             return (global::System.Collections.Generic.List<global::CSharpToJsonSchema.Tool>) (this.AvailableTools??= new global::System.Collections.Generic.List<global::CSharpToJsonSchema.Tool>());
         }}   
-    }}
+    }}   
 }}";
     }
     
     private static string GetInputsTypes(MethodData first, bool addReturnType = true)
     {
         var f = first.Parameters.Select(s => s.Type.ToDisplayString()).ToList();
+        if(addReturnType)
+            f.Add(first.ReturnType.ToDisplayString());
+        return string.Join(", ", f);
+    }
+    
+    private static string GetDelegateInputsTypes(MethodData first, bool addReturnType = true)
+    {
+        var f = first.Parameters.Select(s => $"{s.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {s.Name}"+(s.HasExplicitDefaultValue? $" = " + (s.Type.Name == "CancellationToken"?"default":s.ExplicitDefaultValue?.ToString()) :"")).ToList();
         if(addReturnType)
             f.Add(first.ReturnType.ToDisplayString());
         return string.Join(", ", f);

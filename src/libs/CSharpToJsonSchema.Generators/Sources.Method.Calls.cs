@@ -2,6 +2,7 @@
 using CSharpToJsonSchema.Generators.JsonGen.Helpers;
 using CSharpToJsonSchema.Generators.Models;
 using H.Generators.Extensions;
+using SymbolDisplayFormat = Microsoft.CodeAnalysis.SymbolDisplayFormat;
 
 namespace CSharpToJsonSchema.Generators;
 
@@ -13,7 +14,7 @@ internal static partial class Sources
             return string.Empty;
         var extensionsClassName = @interface.Name;
         var res = @$"#nullable enable
-   #pragma warning disable CS8602
+   #pragma warning disable CS8602,CS8600
 
 namespace {@interface.Namespace}
 {{
@@ -77,14 +78,14 @@ namespace {@interface.Namespace}
             #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {{
-                #pragma disable warning IL2026, IL3050
+                #pragma warning disable IL2026, IL3050
                 return global::System.Text.Json.JsonSerializer.Deserialize<{method.Name}Args>(json, new global::System.Text.Json.JsonSerializerOptions
                 {{
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{{{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }}}}
                 }}) ??
                 throw new global::System.InvalidOperationException(""Could not deserialize JSON."");
-                #pragma restore warning IL2026, IL3050
+                #pragma warning restore IL2026, IL3050
             }}
             else
             {{
@@ -107,19 +108,19 @@ namespace {@interface.Namespace}
         private string Call{method.Name}(string json)
         {{
             var args = As{method.Name}Args(json);
-            var func = (dynamic) Delegates[""{method.Name}""];
-            var jsonResult = func.Invoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken").Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
+            var func = Delegates[""{method.Name}""];
+            var jsonResult = ({method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}) func.DynamicInvoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken").Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
 
      #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {{
-                #pragma disable warning IL2026, IL3050
+                #pragma warning disable IL2026, IL3050
                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
                 {{
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
                 }});
-                #pragma restore warning IL2026, IL3050  
+                #pragma warning restore IL2026, IL3050  
             }}
             else
             {{
@@ -137,9 +138,9 @@ namespace {@interface.Namespace}
 {@interface.Methods.Where(static x => x is { IsAsync: false, IsVoid: true }).Select(method => $@"
         private void Call{method.Name}(string json)
         {{
-            var func = (dynamic) Delegates[""{method.Name}""];
+            var func = Delegates[""{method.Name}""];
             var args = As{method.Name}Args(json);
-            func.Invoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken").Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
+            func.DynamicInvoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken").Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
         }}
 ").Inject()}
 
@@ -149,20 +150,20 @@ namespace {@interface.Namespace}
             global::System.Threading.CancellationToken cancellationToken = default)
         {{
             var args = As{method.Name}Args(json);
-            var func = (dynamic) Delegates[""{method.Name}""];
-            var jsonResult = await func.Invoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken")
-                .Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}").Append("cancellationToken"))});
+            var func = Delegates[""{method.Name}""];
+            var jsonResult = await (({method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)})func.DynamicInvoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken")
+                .Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}").Append("cancellationToken"))}));
 
            #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
             {{
-                #pragma disable warning IL2026, IL3050
+                #pragma warning disable IL2026, IL3050
                 return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
                 {{
                     PropertyNamingPolicy = global::System.Text.Json.JsonNamingPolicy.CamelCase,
                     Converters = {{ new global::System.Text.Json.Serialization.JsonStringEnumConverter(global::System.Text.Json.JsonNamingPolicy.CamelCase) }},
                 }});
-                #pragma restore warning IL2026, IL3050
+                #pragma warning restore IL2026, IL3050
             }}
             else
             {{
@@ -186,9 +187,8 @@ namespace {@interface.Namespace}
             global::System.Threading.CancellationToken cancellationToken = default)
         {{
             var args = As{method.Name}Args(json);
-            //var func = (global::System.Func<{GetInputsTypes(method)}>) Delegates[""{method.Name}""];
-            var func = (dynamic) Delegates[""{method.Name}""];
-            await func.Invoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken").Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))}, cancellationToken);
+            var func = Delegates[""{method.Name}""];
+            await (({method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)})func.DynamicInvoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken").Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))}, cancellationToken));
 
             return string.Empty;
         }}
@@ -210,7 +210,7 @@ namespace {@interface.Namespace}
     {{            
     }}
 }}
-#pragma warning restore CS8602
+#pragma warning restore CS8602,CS8600
 ";
         return res;
     }
