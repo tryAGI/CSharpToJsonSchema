@@ -7,7 +7,8 @@ namespace CSharpToJsonSchema;
 [JsonSerializable(typeof(IDictionary<string, string>))]
 [JsonSerializable(typeof(Tool))]
 [JsonSerializable(typeof(List<Tool>))]
-[JsonSourceGenerationOptions(NumberHandling = JsonNumberHandling.Strict, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
+[JsonSerializable(typeof(JsonElement))]
+[JsonSourceGenerationOptions(NumberHandling = JsonNumberHandling.Strict, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,WriteIndented = false)]
 public partial class OpenApiSchemaJsonContext:JsonSerializerContext
 {
     

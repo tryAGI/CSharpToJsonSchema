@@ -50,6 +50,9 @@ public class JsonSchemaGenerator : IIncrementalGenerator
         attributes
             .SelectAndReportExceptions(AsGoogleFunctionToolsForMethods, context, Id)
             .AddSource(context);
+        attributes
+            .SelectAndReportExceptions(AsMeaiFunctionToolsForMethods, context, Id)
+            .AddSource(context);
         
         var generator = new JsonSourceGenerator();
         generator.InitializeForFunctionTools(context);
@@ -72,6 +75,9 @@ public class JsonSchemaGenerator : IIncrementalGenerator
             .AddSource(context);
         attributes
             .SelectAndReportExceptions(AsGoogleFunctionToolsForInterface, context, Id)
+            .AddSource(context);
+        attributes
+            .SelectAndReportExceptions(AsMeaiFunctionToolsForInterface, context, Id)
             .AddSource(context);
         
         var generator = new JsonSourceGenerator();
@@ -119,12 +125,26 @@ public class JsonSchemaGenerator : IIncrementalGenerator
             Name: $"{@interface.Name}.FunctionCalls.generated.cs",
             Text: Sources.GenerateFunctionCalls(@interface));
     }
-
+    
     private static FileWithName AsGoogleFunctionToolsForMethods(InterfaceData @interface)
     {
         return new FileWithName(
             Name: $"{@interface.Name}.GoogleFunctionTools.generated.cs",
             Text: Sources.GenerateGoogleFunctionToolForMethods(@interface));
+    }
+    
+    private static FileWithName AsMeaiFunctionToolsForMethods(InterfaceData @interface)
+    {
+        return new FileWithName(
+            Name: $"{@interface.Name}.MeaiTools.generated.cs",
+            Text: Sources.GenerateMeaiFunctionToolForMethods(@interface));
+    }
+    
+    private static FileWithName AsMeaiFunctionToolsForInterface(InterfaceData @interface)
+    {
+        return new FileWithName(
+            Name: $"{@interface.Name}.MeaiToolsExtensions.generated.cs",
+            Text: Sources.GenerateMeaiFunctionToolForInterface(@interface));
     }
     
     private static FileWithName AsGoogleFunctionToolsForInterface(InterfaceData @interface)

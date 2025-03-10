@@ -17,4 +17,9 @@ public sealed class GenerateJsonSchemaAttribute : Attribute
     /// Generate Google Function Tools extensions for Google_GenerativeAI SDK
     /// </summary>
     public bool GoogleFunctionTool { get; set; }
+    
+    /// <summary>
+    /// Generate Microsoft.Extension.AI compatible function tools
+    /// </summary>
+    public bool MeaiFunctionTool { get; set; }
 }

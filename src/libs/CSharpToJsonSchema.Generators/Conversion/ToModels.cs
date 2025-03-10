@@ -18,6 +18,8 @@ public static class ToModels
                        strict;
         var generateGoogleFunctionTool = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "GoogleFunctionTool").Value.Value is bool googleFunctionTool &&
                                          googleFunctionTool;
+        var meaiFunctionTool= attributeData.NamedArguments.FirstOrDefault(x => x.Key == "MeaiFunctionTool").Value.Value is bool meaift &&
+                              meaift;
         var methods = interfaceSymbol
             .GetMembers()
             .OfType<IMethodSymbol>()
@@ -46,6 +48,7 @@ public static class ToModels
             Namespace: interfaceSymbol.ContainingNamespace.ToDisplayString(),
             Name: interfaceSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
             GoogleFunctionTool:generateGoogleFunctionTool,
+            MeaiFunctionTool:meaiFunctionTool,
             Methods: methods);
     }
 
@@ -60,6 +63,7 @@ public static class ToModels
         List<MethodData> methodList = new();
         List<string> namespaces = new();
         bool generateGoogleFunctionTools = false;
+        bool meaiFunctionTools = false;
         foreach (var l in list)
         {
             var (interfaceSymbol, attributeData) = l;
@@ -69,6 +73,11 @@ public static class ToModels
                                               googleFunctionTool;
             if(ggft)
                 generateGoogleFunctionTools = true;
+            
+            var meai = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "MeaiFunctionTool").Value.Value is bool meaift &&
+                       meaift;
+            if(meai)
+                meaiFunctionTools = true;
             
             var x = interfaceSymbol;
             var parameters = x.Parameters
@@ -94,6 +103,7 @@ public static class ToModels
             Namespace: GetCommonRootNamespace(namespaces)??namespaceName,
             Name: className,
             GoogleFunctionTool: generateGoogleFunctionTools,
+            MeaiFunctionTool:meaiFunctionTools,
             Methods: methodList.ToArray());
     }
     public static string? GetCommonRootNamespace(IEnumerable<string> namespaces)

@@ -42,9 +42,9 @@ namespace {@interface.Namespace}
 
 namespace {@interface.Namespace}
 {{
-    public partial class {extensionsClassName}
+    public static partial class {extensionsClassName}
     {{    
-        public global::GenerativeAI.Core.IFunctionTool AsGoogleFunctionTool(this {@interface.Name} service)
+        public static global::GenerativeAI.Core.IFunctionTool AsGoogleFunctionTool(this {@interface.Name} service)
         {{
             return new global::GenerativeAI.Tools.GenericFunctionTool(service.AsTools(), service.AsCalls());
         }}
