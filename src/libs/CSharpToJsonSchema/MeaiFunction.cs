@@ -64,17 +64,11 @@ public partial class MeaiFunction : AIFunction
     protected override async Task<object?> InvokeCoreAsync(IEnumerable<KeyValuePair<string, object?>> arguments,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var json = GetArgsString(arguments);
+        var json = GetArgsString(arguments);
 
-            var call = await _call(json, cancellationToken);
+        var call = await _call(json, cancellationToken);
 
-            return JsonSerializer.Deserialize(call, OpenApiSchemaJsonContext.Default.JsonElement);
-        }catch(Exception e)
-        {
-            throw new Exception($"Error invoking function {Name}", e);
-        }
+        return JsonSerializer.Deserialize(call, OpenApiSchemaJsonContext.Default.JsonElement);
     }
 
     /// <summary>
@@ -97,7 +91,6 @@ public partial class MeaiFunction : AIFunction
             }
             else if (args.Value is JsonNode node)
             {
-                jsonObject[args.Key] = node.DeepClone();
             }
         }
 
