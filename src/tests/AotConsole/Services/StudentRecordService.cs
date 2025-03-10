@@ -6,9 +6,9 @@ public class StudentRecordService
     [System.ComponentModel.Description("Get student record for the year")]
     [FunctionTool(MeaiFunctionTool = true)]
 
-    public async Task<StudentRecord> GetStudentRecordAsync(QueryStudentRecordRequest query, CancellationToken cancellationToken = default)
+    public Task<StudentRecord> GetStudentRecordAsync(QueryStudentRecordRequest query, CancellationToken cancellationToken = default)
     {
-        return new StudentRecord
+        return Task.FromResult(new StudentRecord
         {
             StudentId = "12345",
             FullName = query.FullName,
@@ -22,7 +22,7 @@ public class StudentRecordService
             },
             EnrollmentDate = new DateTime(2020, 9, 1),
             IsActive = true
-        };
+        });
     }
 }
 

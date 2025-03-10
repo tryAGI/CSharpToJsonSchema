@@ -9,7 +9,7 @@
 
 namespace CSharpToJsonSchema.IntegrationTests
 {
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("CSharpToJsonSchema.Generators", "0.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("CSharpToJsonSchema.Generators", "3.0.0.0")]
     public partial class WeatherStrictToolsExtensionsJsonSerializerContext
     {
         private readonly static global::System.Text.Json.JsonSerializerOptions s_defaultOptions = new(global::System.Text.Json.JsonSerializerDefaults.Web)
