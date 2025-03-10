@@ -141,9 +141,8 @@ public static class SchemaBuilder
         {
             required.Add(re.Key);
         }
-
-
-        var mainDescription = x.Description ?? dics["mainFunction_Desc"];
+       
+        var mainDescription = x.Description ?? (dics.TryGetValue("mainFunction_Desc", out var desc) ? desc : "");
         return new OpenApiSchema()
         {
             Description = mainDescription,
