@@ -117,6 +117,10 @@ public static class SchemaBuilder
         {
             TransformSchemaNode = (a, b) =>
             {
+                if (a.TypeInfo.Type.IsEnum)
+                {
+                    b["type"] = "string";    
+                }
                 if (a.PropertyInfo == null)
                     return b;
                 var propName = ToCamelCase(a.PropertyInfo.Name);
@@ -124,6 +128,7 @@ public static class SchemaBuilder
                 {
                     b["description"] = dics[propName];
                 }
+                
                 return b;
             },
         }));
@@ -134,12 +139,14 @@ public static class SchemaBuilder
             required.Add(re.Key);
         }
 
+        
         var mainDescription =x.Description ?? dics["mainFunction_Desc"];
         return new OpenApiSchema()
         {
             Description = mainDescription,
             Properties = x.Properties,
-            Required = required
+            Required = required,
+            Type = "object"
         };
     }
     
@@ -157,7 +164,9 @@ public static class SchemaBuilder
     {
         var node = jsonOptions.GetJsonSchemaAsNode(type);
         var x = ConvertToCompatibleSchemaSubset(node);
+        
+        var x2=  JsonSerializer.Serialize(x.Properties, OpenApiSchemaJsonContext.Default.IDictionaryStringOpenApiSchema);
 
-        return JsonSerializer.Serialize(x.Properties, OpenApiSchemaJsonContext.Default.IDictionaryStringOpenApiSchema);
+        return x2;
     }
 }
