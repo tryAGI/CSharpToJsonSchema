@@ -110,37 +110,40 @@ public static class SchemaBuilder
     public static OpenApiSchema ConvertToSchema(JsonTypeInfo type, string descriptionString)
     {
         var typeInfo = type;
-        
-        var dics = JsonSerializer.Deserialize(descriptionString,OpenApiSchemaJsonContext.Default.IDictionaryStringString);
-        List<string> required = new List<string>();
-        var x = ConvertToCompatibleSchemaSubset(typeInfo.GetJsonSchemaAsNode(exporterOptions:new JsonSchemaExporterOptions()
-        {
-            TransformSchemaNode = (a, b) =>
-            {
-                if (a.TypeInfo.Type.IsEnum)
-                {
-                    b["type"] = "string";    
-                }
-                if (a.PropertyInfo == null)
-                    return b;
-                var propName = ToCamelCase(a.PropertyInfo.Name);
-                if (dics.ContainsKey(propName))
-                {
-                    b["description"] = dics[propName];
-                }
-                
-                return b;
-            },
-        }));
 
-        
+        var dics = JsonSerializer.Deserialize(descriptionString,
+            OpenApiSchemaJsonContext.Default.IDictionaryStringString);
+        List<string> required = new List<string>();
+        var x = ConvertToCompatibleSchemaSubset(typeInfo.GetJsonSchemaAsNode(
+            exporterOptions: new JsonSchemaExporterOptions()
+            {
+                TransformSchemaNode = (a, b) =>
+                {
+                    if (a.TypeInfo.Type.IsEnum)
+                    {
+                        b["type"] = "string";
+                    }
+
+                    if (a.PropertyInfo == null)
+                        return b;
+                    var propName = ToCamelCase(a.PropertyInfo.Name);
+                    if (dics.ContainsKey(propName))
+                    {
+                        b["description"] = dics[propName];
+                    }
+
+                    return b;
+                },
+            }));
+
+
         foreach (var re in x.Properties)
         {
             required.Add(re.Key);
         }
 
-        
-        var mainDescription =x.Description ?? dics["mainFunction_Desc"];
+
+        var mainDescription = x.Description ?? dics["mainFunction_Desc"];
         return new OpenApiSchema()
         {
             Description = mainDescription,
@@ -149,7 +152,7 @@ public static class SchemaBuilder
             Type = "object"
         };
     }
-    
+
     public static string ToCamelCase(string str)
     {
         if (!string.IsNullOrEmpty(str) && str.Length > 1)
@@ -164,9 +167,7 @@ public static class SchemaBuilder
     {
         var node = jsonOptions.GetJsonSchemaAsNode(type);
         var x = ConvertToCompatibleSchemaSubset(node);
-        
-        var x2=  JsonSerializer.Serialize(x.Properties, OpenApiSchemaJsonContext.Default.IDictionaryStringOpenApiSchema);
 
-        return x2;
+        return JsonSerializer.Serialize(x.Properties, OpenApiSchemaJsonContext.Default.IDictionaryStringOpenApiSchema);
     }
 }
