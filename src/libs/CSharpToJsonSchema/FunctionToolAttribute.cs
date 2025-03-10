@@ -11,4 +11,9 @@ public sealed class FunctionToolAttribute : Attribute
     /// 
     /// </summary>
     public bool Strict { get; set; }
+    
+    /// <summary>
+    /// Generate Google Function Tools extensions for Google_GenerativeAI SDK
+    /// </summary>
+    public bool GoogleFunctionTool { get; set; }
 }

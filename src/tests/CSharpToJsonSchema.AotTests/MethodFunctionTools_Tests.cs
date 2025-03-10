@@ -74,4 +74,5 @@ public class MethodFunctionTools_Tests
         await tools.CallAsync(nameof(MethodFunctionTools.SampleFunctionTool_Static_Void), "{\"input\":\"test\"}");
        
     }
+    
 }

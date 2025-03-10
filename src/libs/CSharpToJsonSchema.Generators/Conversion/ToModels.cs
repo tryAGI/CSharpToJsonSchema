@@ -16,6 +16,8 @@ public static class ToModels
 
         var isStrict = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "Strict").Value.Value is bool strict &&
                        strict;
+        var generateGoogleFunctionTool = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "GoogleFunctionTool").Value.Value is bool googleFunctionTool &&
+                                         googleFunctionTool;
         var methods = interfaceSymbol
             .GetMembers()
             .OfType<IMethodSymbol>()
@@ -43,6 +45,7 @@ public static class ToModels
         return new InterfaceData(
             Namespace: interfaceSymbol.ContainingNamespace.ToDisplayString(),
             Name: interfaceSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
+            GoogleFunctionTool:generateGoogleFunctionTool,
             Methods: methods);
     }
 
@@ -56,11 +59,17 @@ public static class ToModels
         var className = "Tools";
         List<MethodData> methodList = new();
         List<string> namespaces = new();
+        bool generateGoogleFunctionTools = false;
         foreach (var l in list)
         {
             var (interfaceSymbol, attributeData) = l;
             var isStrict = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "Strict").Value.Value is bool strict &&
                            strict;
+            var ggft = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "GoogleFunctionTool").Value.Value is bool googleFunctionTool &&
+                                              googleFunctionTool;
+            if(ggft)
+                generateGoogleFunctionTools = true;
+            
             var x = interfaceSymbol;
             var parameters = x.Parameters
                 //.Where(static x => x.Type.MetadataName != "CancellationToken")
@@ -84,6 +93,7 @@ public static class ToModels
         return new InterfaceData(
             Namespace: GetCommonRootNamespace(namespaces)??namespaceName,
             Name: className,
+            GoogleFunctionTool: generateGoogleFunctionTools,
             Methods: methodList.ToArray());
     }
     public static string? GetCommonRootNamespace(IEnumerable<string> namespaces)

@@ -30,8 +30,4 @@
       <ProjectReference Include="..\..\libs\CSharpToJsonSchema.Generators\CSharpToJsonSchema.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="MethodTool\" />
-    </ItemGroup>
-
 </Project>

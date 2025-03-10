@@ -29,7 +29,6 @@ public class MethodFunctionTools
         return "Hello world from string return";
     }
     
-    
     [FunctionTool]
     public static Task<string> SampleFunctionTool_Static_StringAsync(string input, CancellationToken cancellationToken = default)
     {

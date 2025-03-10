@@ -47,6 +47,10 @@ public class JsonSchemaGenerator : IIncrementalGenerator
             .SelectAndReportExceptions(AsFunctionCalls, context, Id)
             .AddSource(context);
         
+        attributes
+            .SelectAndReportExceptions(AsGoogleFunctionToolsForMethods, context, Id)
+            .AddSource(context);
+        
         var generator = new JsonSourceGenerator();
         generator.InitializeForFunctionTools(context);
     }
@@ -65,6 +69,9 @@ public class JsonSchemaGenerator : IIncrementalGenerator
         
         attributes
             .SelectAndReportExceptions(AsCalls, context, Id)
+            .AddSource(context);
+        attributes
+            .SelectAndReportExceptions(AsGoogleFunctionToolsForInterface, context, Id)
             .AddSource(context);
         
         var generator = new JsonSourceGenerator();
@@ -112,7 +119,20 @@ public class JsonSchemaGenerator : IIncrementalGenerator
             Name: $"{@interface.Name}.FunctionCalls.generated.cs",
             Text: Sources.GenerateFunctionCalls(@interface));
     }
+
+    private static FileWithName AsGoogleFunctionToolsForMethods(InterfaceData @interface)
+    {
+        return new FileWithName(
+            Name: $"{@interface.Name}.GoogleFunctionTools.generated.cs",
+            Text: Sources.GenerateGoogleFunctionToolForMethods(@interface));
+    }
     
+    private static FileWithName AsGoogleFunctionToolsForInterface(InterfaceData @interface)
+    {
+        return new FileWithName(
+            Name: $"{@interface.Name}.GoogleFunctionToolsExtensions.generated.cs",
+            Text: Sources.GenerateGoogleFunctionToolForInterface(@interface));
+    }
    
 
     public static (string hintName, SourceText sourceText) AsCalls2(InterfaceData @interface)

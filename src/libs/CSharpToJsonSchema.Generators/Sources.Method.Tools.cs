@@ -79,7 +79,12 @@ namespace {@interface.Namespace}
         
         public static implicit operator global::System.Collections.Generic.List<global::CSharpToJsonSchema.Tool>({@interface.Namespace}.{extensionsClassName} tools)
         {{
-            return (global::System.Collections.Generic.List<global::CSharpToJsonSchema.Tool>) (tools.AvailableTools??= new global::System.Collections.Generic.List<global::CSharpToJsonSchema.Tool>());
+            return tools.AsTools();
+        }}   
+
+        public global::System.Collections.Generic.List<global::CSharpToJsonSchema.Tool> AsTools()
+        {{
+            return (global::System.Collections.Generic.List<global::CSharpToJsonSchema.Tool>) (this.AvailableTools??= new global::System.Collections.Generic.List<global::CSharpToJsonSchema.Tool>());
         }}   
     }}
 }}";
