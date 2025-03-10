@@ -127,7 +127,6 @@ public class JsonSerializationTests
     {
         var service = new StudenRecordService();
         var tools = service.AsTools();
-        var serialize = JsonSerializer.Serialize(tools, OpenApiSchemaJsonContext.Default.ListTool);
     }
    
 }
