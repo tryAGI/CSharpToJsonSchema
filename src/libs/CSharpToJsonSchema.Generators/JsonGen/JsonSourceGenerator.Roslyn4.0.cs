@@ -21,6 +21,7 @@ namespace CSharpToJsonSchema.Generators.JsonGen
     {
         //private const string JsonSerializableAttributeFullName = "CSharpToJsonSchema.Generators.JsonGen.System.Text.Json.JsonSerializableAttribute";
         private const string JsonSerializableAttributeFullName = "CSharpToJsonSchema.GenerateJsonSchemaAttribute";
+        private const string FunctionToolAttributeFullName = "CSharpToJsonSchema.FunctionToolAttribute";
 #if ROSLYN4_4_OR_GREATER
         public const string SourceGenerationSpecTrackingName = "SourceGenerationSpec";
 #endif
@@ -56,6 +57,52 @@ namespace CSharpToJsonSchema.Generators.JsonGen
                             parser.Diagnostics.ToImmutableEquatableArray();
                         return (contextGenerationSpec, diagnostics);
                     })
+#if ROSLYN4_4_OR_GREATER
+                .WithTrackingName(SourceGenerationSpecTrackingName)
+#endif
+                ;
+
+            context.RegisterSourceOutput(contextGenerationSpecs, ReportDiagnosticsAndEmitSource);
+        }
+         
+         public void InitializeForFunctionTools(IncrementalGeneratorInitializationContext context)
+        {
+#if LAUNCH_DEBUGGER
+            System.Diagnostics.Debugger.Launch();
+#endif
+            IncrementalValueProvider<KnownTypeSymbols> knownTypeSymbols = context.CompilationProvider
+                .Select((compilation, _) => new KnownTypeSymbols(compilation));
+
+            IncrementalValueProvider<(Model.ContextGenerationSpec?, ImmutableEquatableArray<DiagnosticInfo>)>
+                contextGenerationSpecs = IncrementalValueProviderExtensions.Combine(
+                        context.CompilationProvider
+                            .ForAttributeWithMetadataName<(MethodDeclarationSyntax ContextClass, SemanticModel
+                                SemanticModel)>(
+#if !ROSLYN4_4_OR_GREATER
+                                context,
+#endif
+                                FunctionToolAttributeFullName,
+                                (node, _) => node is MethodDeclarationSyntax,
+                                (context, _) =>
+                                    (ContextClass: (MethodDeclarationSyntax)context.TargetNode, context.SemanticModel)),
+                        knownTypeSymbols)
+                    .Collect().Select(static (tuple,CancellationToken) =>
+                    {
+                        
+                        var known = tuple.FirstOrDefault();
+                        var knowntype = known.Right;
+                        if (knowntype == null && !tuple.Any())
+                        {
+                            return (null, ImmutableEquatableArray<DiagnosticInfo>.Empty);
+                            //knowntype =new KnownTypeSymbols(tuple.First().Left.SemanticModel.Compilation);
+                        }
+                        Parser parser = new(knowntype);
+                        Model.ContextGenerationSpec? contextGenerationSpec =
+                            parser.ParseContextGenerationSpec(tuple,CancellationToken);
+                        ImmutableEquatableArray<DiagnosticInfo> diagnostics =
+                            parser.Diagnostics.ToImmutableEquatableArray();
+                        return (contextGenerationSpec, diagnostics);
+                    })//.Select(sx=>(sx.contextGenerationSpec,sx.contextGenerationSpec))
 #if ROSLYN4_4_OR_GREATER
                 .WithTrackingName(SourceGenerationSpecTrackingName)
 #endif

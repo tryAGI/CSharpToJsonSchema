@@ -16,6 +16,8 @@ public static class ToModels
 
         var isStrict = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "Strict").Value.Value is bool strict &&
                        strict;
+        var generateGoogleFunctionTool = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "GoogleFunctionTool").Value.Value is bool googleFunctionTool &&
+                                         googleFunctionTool;
         var methods = interfaceSymbol
             .GetMembers()
             .OfType<IMethodSymbol>()
@@ -43,41 +45,92 @@ public static class ToModels
         return new InterfaceData(
             Namespace: interfaceSymbol.ContainingNamespace.ToDisplayString(),
             Name: interfaceSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
+            GoogleFunctionTool:generateGoogleFunctionTool,
             Methods: methods);
     }
 
     public static InterfaceData PrepareMethodData(
-        this IMethodSymbol interfaceSymbol,
-        AttributeData attributeData)
+        List<(IMethodSymbol, AttributeData)> list)
     {
-        interfaceSymbol = interfaceSymbol ?? throw new ArgumentNullException(nameof(interfaceSymbol));
-        attributeData = attributeData ?? throw new ArgumentNullException(nameof(attributeData));
+        //interfaceSymbol = interfaceSymbol ?? throw new ArgumentNullException(nameof(interfaceSymbol));
+        list = list ?? throw new ArgumentNullException(nameof(list));
 
-        var isStrict = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "Strict").Value.Value is bool strict &&
-                       strict;
-        var x = interfaceSymbol;
-        var parameters = x.Parameters
-            //.Where(static x => x.Type.MetadataName != "CancellationToken")
-            .ToArray();
+        var namespaceName = "CSharpToJsonSchema";
+        var className = "Tools";
+        List<MethodData> methodList = new();
+        List<string> namespaces = new();
+        bool generateGoogleFunctionTools = false;
+        foreach (var l in list)
+        {
+            var (interfaceSymbol, attributeData) = l;
+            var isStrict = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "Strict").Value.Value is bool strict &&
+                           strict;
+            var ggft = attributeData.NamedArguments.FirstOrDefault(x => x.Key == "GoogleFunctionTool").Value.Value is bool googleFunctionTool &&
+                                              googleFunctionTool;
+            if(ggft)
+                generateGoogleFunctionTools = true;
+            
+            var x = interfaceSymbol;
+            var parameters = x.Parameters
+                //.Where(static x => x.Type.MetadataName != "CancellationToken")
+                .ToArray();
 
-        var methodData = new MethodData(
-            Name: x.Name,
-            Description: GetDescription(x),
-            IsAsync: x.IsAsync || x.ReturnType.Name == "Task",
-            IsVoid: x.ReturnsVoid || x.ReturnType.MetadataName == "Task",
-            IsStrict: isStrict,
-            Parameters: parameters.Select(static y => y).ToArray(),
-            Descriptions: parameters.Select(static l => GetParameterDescriptions(l)).SelectMany(s => s)
-                .ToDictionary(s => s.Key, s => s.Value),
-            ReturnType:x.ReturnType
-        );
-
+            var methodData = new MethodData(
+                Name: x.Name,
+                Description: GetDescription(x),
+                IsAsync: x.IsAsync || x.ReturnType.Name == "Task",
+                IsVoid: x.ReturnsVoid || x.ReturnType.MetadataName == "Task",
+                IsStrict: isStrict,
+                Parameters: parameters.Select(static y => y).ToArray(),
+                Descriptions: parameters.Select(static l => GetParameterDescriptions(l)).SelectMany(s => s)
+                    .ToDictionary(s => s.Key, s => s.Value),
+                ReturnType:x.ReturnType
+            );
+            methodList.Add(methodData);
+            namespaces.Add(interfaceSymbol.ContainingNamespace.ToDisplayString());
+        }
 
         return new InterfaceData(
-            Namespace: interfaceSymbol.ContainingNamespace.ToDisplayString(),
-            Name: "I"+interfaceSymbol.Name,
-            Methods: [methodData]);
+            Namespace: GetCommonRootNamespace(namespaces)??namespaceName,
+            Name: className,
+            GoogleFunctionTool: generateGoogleFunctionTools,
+            Methods: methodList.ToArray());
     }
+    public static string? GetCommonRootNamespace(IEnumerable<string> namespaces)
+    {
+        // Convert the list of namespaces to a list of arrays split by "."
+        var splitNamespaces = namespaces
+            .Select(ns => ns.Split('.'))
+            .ToList();
+
+        if (!splitNamespaces.Any() || !splitNamespaces[0].Any())
+        {
+            return null;
+        }
+
+        // Start with the first namespace parts
+        var firstNsParts = splitNamespaces[0];
+        var commonParts = new List<string>();
+
+        // For each index in the first namespace
+        for (int i = 0; i < firstNsParts.Length; i++)
+        {
+            // Check if every other namespace has the same part at this index
+            string currentPart = firstNsParts[i];
+            if (splitNamespaces.All(nsArr => nsArr.Length > i && nsArr[i] == currentPart))
+            {
+                commonParts.Add(currentPart);
+            }
+            else
+            {
+                // Stop the moment there is a mismatch
+                break;
+            }
+        }
+
+        return string.Join(".", commonParts);
+    }
+
 
     // private static Dictionary<string, bool> GetIsRequired(IParameterSymbol[] parameters, Dictionary<string, bool>? dics = null)
     // {

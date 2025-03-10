@@ -3,6 +3,12 @@ namespace CSharpToJsonSchema.SnapshotTests;
 [TestClass]
 public class ToolTests : VerifyBase
 {
+    // [TestMethod]
+    // public Task MethodFunction()
+    // {
+    //     return this.CheckSourceAsync(H.Resources.MethodFunctionTools_cs.AsString());
+    // }
+    
     [TestMethod]
     public Task Weather()
     {

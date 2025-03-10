@@ -5,40 +5,42 @@ using H.Generators.Extensions;
 
 namespace CSharpToJsonSchema.Generators;
 
-public class Sources_Method_Calls
+internal static partial class Sources
 {
-     public static string GenerateCalls(InterfaceData @interface)
+    public static string GenerateFunctionCalls(InterfaceData @interface)
     {
-        var extensionsClassName = @interface.Name.Substring(startIndex: 1) + "Extensions";
+        if(@interface.Methods.Count == 0)
+            return string.Empty;
+        var extensionsClassName = @interface.Name;
         var res = @$"#nullable enable
+   #pragma warning disable CS8602
 
 namespace {@interface.Namespace}
 {{
 {@interface.Methods.Select(static method => $@"
     public class {method.Name}Args
-    {{
-         
-         {string.Join("\n         ", method.Parameters.Select(static x => $@"[global::System.ComponentModel.Description({"\""}{ToModels.GetDescription(x)}{"\""})]
+    {{         
+         {string.Join("\n         ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken").Select(static x => $@"[global::System.ComponentModel.Description({"\""}{ToModels.GetDescription(x)}{"\""})]
           public {x.Type.ToDisplayString()}{(x.Type.IsNullableType() ? "?" : "")} {x.Name.ToPropertyName()} {{ get; set; }}{(!string.IsNullOrEmpty(ToModels.GetDefaultValue(x.Type)) ? $" = {ToModels.GetDefaultValue(x.Type)};" : "")}"))}
     }}
 ").Inject()}
 
-    public static partial class {extensionsClassName}
+    public partial class {extensionsClassName}
     {{
-        public static global::System.Collections.Generic.IReadOnlyDictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>> AsCalls(this {@interface.Name} service)
+        public global::System.Collections.Generic.IReadOnlyDictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>> AsCalls()
         {{
             return new global::System.Collections.Generic.Dictionary<string, global::System.Func<string, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>>
             {{
 {@interface.Methods.Where(static x => x is { IsAsync: false, IsVoid: false }).Select(method => $@"
                 [""{method.Name}""] = (json, _) =>
                 {{
-                    return global::System.Threading.Tasks.Task.FromResult(service.Call{method.Name}(json));
+                    return global::System.Threading.Tasks.Task.FromResult(Call{method.Name}(json));
                 }},
 ").Inject()}
 {@interface.Methods.Where(static x => x is { IsAsync: false, IsVoid: true }).Select(method => $@"
                 [""{method.Name}""] = (json, _) =>
                 {{
-                    service.Call{method.Name}(json);
+                    Call{method.Name}(json);
 
                     return global::System.Threading.Tasks.Task.FromResult(string.Empty);
                 }},
@@ -46,13 +48,13 @@ namespace {@interface.Namespace}
 {@interface.Methods.Where(static x => x is { IsAsync: true, IsVoid: false }).Select(method => $@"
                 [""{method.Name}""] = async (json, cancellationToken) =>
                 {{
-                    return await service.Call{method.Name}(json, cancellationToken);
+                    return await Call{method.Name}(json, cancellationToken);
                 }},
 ").Inject()}
 {@interface.Methods.Where(static x => x is { IsAsync: true, IsVoid: true }).Select(method => $@"
                 [""{method.Name}""] = async (json, cancellationToken) =>
                 {{
-                    await service.Call{method.Name}(json, cancellationToken);
+                    await Call{method.Name}(json, cancellationToken);
 
                     return string.Empty;
                 }},
@@ -61,8 +63,7 @@ namespace {@interface.Namespace}
         }}
 
 {@interface.Methods.Select(method => $@"
-        public static {method.Name}Args As{method.Name}Args(
-            this {@interface.Name} functions,
+        private {method.Name}Args As{method.Name}Args(            
             string json)
         {{
             #if NET6_0_OR_GREATER
@@ -95,10 +96,11 @@ namespace {@interface.Namespace}
 ").Inject()}
 
 {@interface.Methods.Where(static x => x is { IsAsync: false, IsVoid: false }).Select(method => $@"
-        public static string Call{method.Name}(this {@interface.Name} functions, string json)
+        private string Call{method.Name}(string json)
         {{
-            var args = functions.As{method.Name}Args(json);
-            var jsonResult = functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
+            var args = As{method.Name}Args(json);
+            var func = (dynamic) Delegates[""{method.Name}""];
+            var jsonResult = func.Invoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken").Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
 
      #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
@@ -125,21 +127,22 @@ namespace {@interface.Namespace}
         }}
 ").Inject()}
 {@interface.Methods.Where(static x => x is { IsAsync: false, IsVoid: true }).Select(method => $@"
-        public static void Call{method.Name}(this {@interface.Name} functions, string json)
+        private void Call{method.Name}(string json)
         {{
-            var args = functions.As{method.Name}Args(json);
-            functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
+            var func = (dynamic) Delegates[""{method.Name}""];
+            var args = As{method.Name}Args(json);
+            func.Invoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken").Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
         }}
 ").Inject()}
 
 {@interface.Methods.Where(static x => x is { IsAsync: true, IsVoid: false }).Select(method => $@"
-        public static async global::System.Threading.Tasks.Task<string> Call{method.Name}(
-            this {@interface.Name} functions,
+        private async global::System.Threading.Tasks.Task<string> Call{method.Name}(
             string json,
             global::System.Threading.CancellationToken cancellationToken = default)
         {{
-            var args = functions.As{method.Name}Args(json);
-            var jsonResult = await functions.{method.Name}({string.Join(", ", method.Parameters
+            var args = As{method.Name}Args(json);
+            var func = (dynamic) Delegates[""{method.Name}""];
+            var jsonResult = await func.Invoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken")
                 .Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}").Append("cancellationToken"))});
 
            #if NET6_0_OR_GREATER
@@ -170,25 +173,25 @@ namespace {@interface.Namespace}
 ").Inject()}
 
 {@interface.Methods.Where(static x => x is { IsAsync: true, IsVoid: true }).Select(method => $@"
-        public static async global::System.Threading.Tasks.Task<string> Call{method.Name}(
-            this {@interface.Name} functions,
+        private async global::System.Threading.Tasks.Task<string> Call{method.Name}(            
             string json,
             global::System.Threading.CancellationToken cancellationToken = default)
         {{
-            var args = functions.As{method.Name}Args(json);
-            await functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))}, cancellationToken);
+            var args = As{method.Name}Args(json);
+            //var func = (global::System.Func<{GetInputsTypes(method)}>) Delegates[""{method.Name}""];
+            var func = (dynamic) Delegates[""{method.Name}""];
+            await func.Invoke({string.Join(", ", method.Parameters.Where(s=>s.Type.Name!="CancellationToken").Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))}, cancellationToken);
 
             return string.Empty;
         }}
 ").Inject()}
 
-        public static async global::System.Threading.Tasks.Task<string> CallAsync(
-            this {@interface.Name} service,
+        public async global::System.Threading.Tasks.Task<string> CallAsync(            
             string functionName,
             string argumentsAsJson,
             global::System.Threading.CancellationToken cancellationToken = default)
         {{
-            var calls = service.AsCalls();
+            var calls = AsCalls();
             var func = calls[functionName];
 
             return await func(argumentsAsJson, cancellationToken);
@@ -198,7 +201,9 @@ namespace {@interface.Namespace}
     public partial class {extensionsClassName}JsonSerializerContext: global::System.Text.Json.Serialization.JsonSerializerContext
     {{            
     }}
-}}";
+}}
+#pragma warning restore CS8602
+";
         return res;
     }
 }
