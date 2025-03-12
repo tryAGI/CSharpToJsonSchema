@@ -30,7 +30,7 @@ namespace {@interface.Namespace}
             foreach (var tool in tools)
             {{
                 var call = calls[tool.Name];
-                lst.Add(new global::CSharpToJsonSchema.MeaiFunction(tool, call));
+                lst.Add(new global::CSharpToJsonSchema.MeaiFunction(tool, call, global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.Options));
             }}
             return lst;
         }}
@@ -59,7 +59,7 @@ namespace {@interface.Namespace}
             foreach (var tool in tools)
             {{
                 var call = calls[tool.Name];
-                lst.Add(new global::CSharpToJsonSchema.MeaiFunction(tool, call));
+                lst.Add(new global::CSharpToJsonSchema.MeaiFunction(tool, call, global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.Options));
             }}
             return lst;
         }}

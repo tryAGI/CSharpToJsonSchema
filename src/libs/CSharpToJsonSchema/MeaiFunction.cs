@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Microsoft.Extensions.AI;
 
 namespace CSharpToJsonSchema;
@@ -29,6 +31,8 @@ public partial class MeaiFunction : AIFunction
     /// Gets the description of the tool.
     /// </summary>
     public override string Description => _tool.Description;
+    
+    private JsonSerializerOptions? _options;
    
     /// <summary>
     /// Gets additional properties associated with the tool.
@@ -40,7 +44,7 @@ public partial class MeaiFunction : AIFunction
     /// </summary>
     /// <param name="tool">The tool associated with this function.</param>
     /// <param name="call">The function to execute the tool with input arguments.</param>
-    public MeaiFunction(Tool tool, Func<string, CancellationToken, Task<string>> call)
+    public MeaiFunction(Tool tool, Func<string, CancellationToken, Task<string>> call, JsonSerializerOptions? options = null)
     {
         this._tool = tool;
         this._call = call;
@@ -53,7 +57,28 @@ public partial class MeaiFunction : AIFunction
         {
             tool.AdditionalProperties.Add("Strict", true);
         }
+
+        _options = options;
     }
+
+    
+    #pragma warning disable IL2026, IL3050 // Reflection is used only when enabled
+    private JsonSerializerOptions InitializeReflectionOptions()
+    {
+        if(!JsonSerializer.IsReflectionEnabledByDefault)
+            throw new InvalidOperationException("JsonSerializer.IsReflectionEnabledByDefault is false, please pass in a JsonSerializerOptions instance.");
+       
+        _options = new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() },
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver()
+        };
+        return _options;
+    }
+    #pragma warning restore IL2026, IL3050 // Reflection is used only when enabled
 
     /// <summary>
     /// Invokes the tool with the given arguments asynchronously.
@@ -76,7 +101,7 @@ public partial class MeaiFunction : AIFunction
     /// </summary>
     /// <param name="arguments">The arguments to be converted into a JSON string.</param>
     /// <returns>A JSON string representation of the arguments.</returns>
-    private string GetArgsString(IEnumerable<KeyValuePair<string, object?>> arguments)
+    protected virtual string GetArgsString(IEnumerable<KeyValuePair<string, object?>> arguments)
     {
         var jsonObject = new JsonObject();
 
@@ -93,6 +118,41 @@ public partial class MeaiFunction : AIFunction
             }
             else if (args.Value is JsonNode node)
             {
+                jsonObject[args.Key] = node;
+            }
+            else if (args.Value is JsonValue val)
+            {
+                jsonObject[args.Key] = val;
+            }
+            else if( args.Value is JsonObject obj)
+            {
+                jsonObject[args.Key] = obj;
+            }
+            else if (args.Value is JsonArray arr)
+            {
+                jsonObject[args.Key] = arr;
+            }
+            else
+            {
+                var type = args.Value?.GetType();
+                if(type.IsPrimitive)
+                {
+                    jsonObject[args.Key] = JsonValue.Create(args.Value);
+                }
+                else
+                {
+                    if (_options == null)
+                    {  
+                        //Fallback to Reflection
+                        //This will break the AOT, Hoping for the best, IChatClient implementation only send JSON classes
+                        //Or Developer is using the code generator
+                        _options = InitializeReflectionOptions();
+                    }
+                    var typeInfo = _options.GetTypeInfo(type);
+
+                    var str = JsonSerializer.Serialize(args.Value, typeInfo);
+                    jsonObject[args.Key] = JsonNode.Parse(str);
+                }
             }
         }
 
