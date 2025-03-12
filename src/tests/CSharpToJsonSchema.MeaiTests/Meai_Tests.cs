@@ -30,10 +30,10 @@ public class Meai_Tests
         var message = new ChatMessage(ChatRole.User, "How does student john doe in senior grade is doing this year, enrollment start 01-01-2024 to 01-01-2025?");
         var response = await chatClient.GetResponseAsync(message,options:chatOptions).ConfigureAwait(false);
 
-        response.Choices.LastOrDefault().Text.Contains("John", StringComparison.InvariantCultureIgnoreCase).Should()
+        response.Text.Contains("John", StringComparison.InvariantCultureIgnoreCase).Should()
             .Be(true);
         
-        Console.WriteLine(response.Choices.LastOrDefault().Text);
+        Console.WriteLine(response.Text);
 
     }
     
@@ -59,10 +59,10 @@ public class Meai_Tests
         var message = new ChatMessage(ChatRole.User, prompt);
         var response = await chatClient.GetResponseAsync(message,options:chatOptions).ConfigureAwait(false);
 
-        response.Choices.LastOrDefault().Text.Contains("damdamadum", StringComparison.InvariantCultureIgnoreCase).Should()
+        response.Text.Contains("damdamadum", StringComparison.InvariantCultureIgnoreCase).Should()
             .Be(true);
         
-        Console.WriteLine(response.Choices.LastOrDefault().Text);
+        Console.WriteLine(response.Text);
 
     }
 }
