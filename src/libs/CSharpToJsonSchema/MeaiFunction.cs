@@ -62,9 +62,10 @@ public partial class MeaiFunction : AIFunction
     }
 
     
-    #pragma warning disable IL2026, IL3050 // Reflection is used only when enabled
+    
     private JsonSerializerOptions InitializeReflectionOptions()
     {
+     #pragma warning disable IL2026, IL3050 // Reflection is used only when enabled
         if(!JsonSerializer.IsReflectionEnabledByDefault)
             throw new InvalidOperationException("JsonSerializer.IsReflectionEnabledByDefault is false, please pass in a JsonSerializerOptions instance.");
        
@@ -77,8 +78,9 @@ public partial class MeaiFunction : AIFunction
             TypeInfoResolver = new DefaultJsonTypeInfoResolver()
         };
         return _options;
-    }
     #pragma warning restore IL2026, IL3050 // Reflection is used only when enabled
+    }
+    
 
     /// <summary>
     /// Invokes the tool with the given arguments asynchronously.
@@ -134,25 +136,27 @@ public partial class MeaiFunction : AIFunction
             }
             else
             {
-                var type = args.Value?.GetType();
-                if(type.IsPrimitive)
-                {
-                    jsonObject[args.Key] = JsonValue.Create(args.Value);
-                }
-                else
-                {
+                 var type = args.Value?.GetType();
+                // if(type.IsPrimitive)
+                // {
+                //     jsonObject[args.Key] = JsonValue.Create(args.Value);
+                // }
+                // else
+                // {
                     if (_options == null)
                     {  
+                        #pragma warning disable IL2026, IL3050 // Reflection is used only when enabled
                         //Fallback to Reflection
                         //This will break the AOT, Hoping for the best, IChatClient implementation only send JSON classes
                         //Or Developer is using the code generator
                         _options = InitializeReflectionOptions();
+                        #pragma warning disable IL2026, IL3050 // Reflection is used only when enabled
                     }
                     var typeInfo = _options.GetTypeInfo(type);
 
                     var str = JsonSerializer.Serialize(args.Value, typeInfo);
                     jsonObject[args.Key] = JsonNode.Parse(str);
-                }
+                //}
             }
         }
 
