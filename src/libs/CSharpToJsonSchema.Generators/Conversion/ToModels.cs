@@ -37,8 +37,6 @@ public static class ToModels
                     IsVoid: x.ReturnsVoid || x.ReturnType.MetadataName == "Task",
                     IsStrict: isStrict,
                     Parameters: parameters.Select(static y => y).ToArray(),
-                    Descriptions: parameters.Select(static l => GetParameterDescriptions(l)).SelectMany(s => s)
-                        .ToDictionary(s => s.Key, s => s.Value),
                     ReturnType: x.ReturnType
                 );
             })
@@ -91,8 +89,6 @@ public static class ToModels
                 IsVoid: x.ReturnsVoid || x.ReturnType.MetadataName == "Task",
                 IsStrict: isStrict,
                 Parameters: parameters.Select(static y => y).ToArray(),
-                Descriptions: parameters.Select(static l => GetParameterDescriptions(l)).SelectMany(s => s)
-                    .ToDictionary(s => s.Key, s => s.Value),
                 ReturnType:x.ReturnType
             );
             methodList.Add(methodData);
