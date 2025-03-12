@@ -9,7 +9,7 @@ var key = Environment.GetEnvironmentVariable("OPEN_AI_APIKEY",EnvironmentVariabl
 if (string.IsNullOrWhiteSpace(key))
     return;
 var prompt = "how does student john doe in senior grade is doing this year, enrollment start 01-01-2024 to 01-01-2025?";
-        
+//prompt = "what is written on page 96 in the book 'damdamadum'";
 var client = new OpenAIClient(new ApiKeyCredential(key));
 
 Microsoft.Extensions.AI.OpenAIChatClient openAiClient = new OpenAIChatClient(client.GetChatClient("gpt-4o-mini"));

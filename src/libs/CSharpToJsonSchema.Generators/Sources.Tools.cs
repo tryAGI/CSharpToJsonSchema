@@ -97,7 +97,7 @@ namespace {@interface.Namespace}
     {
         StringBuilder sb = new StringBuilder();
 
-        var methodDescriptions = data.Descriptions;
+        var methodDescriptions = new Dictionary<string, string>();
         methodDescriptions.Add("MainFunction_Desc", data.Description);
         sb.Append("{");
         var lst = methodDescriptions.Select(s => $"\"{s.Key.ToCamelCase()}\":\"{s.Value}\"");

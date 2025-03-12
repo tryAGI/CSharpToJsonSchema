@@ -127,6 +127,35 @@ public class JsonSerializationTests
     {
         var service = new StudenRecordService();
         var tools = service.AsTools();
+
+        Tool tool = tools[0];
+
+
+        var openApiSchema = (OpenApiSchema)tool.Parameters;
+        tool.Description.Should().Be("Get student record for the year");
+        tool.Name.Should().Be("GetStudentRecordAsync");
+        openApiSchema.Properties["query"].Should().NotBeNull();
+
+        openApiSchema.Properties["query"].Properties["fullName"].Type.Should().Be("string");
+        openApiSchema.Properties["query"].Properties["fullName"].Description.Should().Be("The student's full name.");
+
+        openApiSchema.Properties["query"].Properties["gradeFilters"].Type.Should().Be("array");
+        openApiSchema.Properties["query"].Properties["gradeFilters"].Items.Type.Should().Be("string");
+        openApiSchema.Properties["query"].Properties["gradeFilters"].Description.Should()
+            .Be("Grade filters for querying specific grades, e.g., Freshman or Senior.");
+
+        openApiSchema.Properties["query"].Properties["enrollmentStartDate"].Type.Should().Be("string");
+        openApiSchema.Properties["query"].Properties["enrollmentStartDate"].Format.Should().Be("date-time");
+        openApiSchema.Properties["query"].Properties["enrollmentStartDate"].Description.Should()
+            .Be("The start date for the enrollment date range. ISO 8601 standard date");
+
+        openApiSchema.Properties["query"].Properties["enrollmentEndDate"].Type.Should().Be("string");
+        openApiSchema.Properties["query"].Properties["enrollmentEndDate"].Format.Should().Be("date-time");
+        openApiSchema.Properties["query"].Properties["enrollmentEndDate"].Description.Should()
+            .Be("The end date for the enrollment date range. ISO 8601 standard date");
+
+        openApiSchema.Properties["query"].Properties["isActive"].Type.Should().Be("boolean");
+        openApiSchema.Properties["query"].Properties["isActive"].Description.Should()
+            .Be("The flag indicating whether to include only active students.");
     }
-   
 }

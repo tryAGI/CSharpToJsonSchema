@@ -88,6 +88,8 @@ public partial class MeaiFunction : AIFunction
                     jsonObject[args.Key] = JsonArray.Create(element);
                 else if (element.ValueKind == JsonValueKind.Object)
                     jsonObject[args.Key] = JsonObject.Create(element);
+                else
+                    jsonObject[args.Key] = JsonValue.Create(element);
             }
             else if (args.Value is JsonNode node)
             {
