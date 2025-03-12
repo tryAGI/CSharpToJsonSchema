@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30204.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E793AF18-4371-4EBD-96FC-195EB1798855}"
 	ProjectSection(SolutionItems) = preProject
@@ -25,9 +24,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{2D8B78DE-7269-417B-9D0B-8981FA513ACB}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\auto-merge.yml = .github\workflows\auto-merge.yml
+		.github\dependabot.yml = .github\dependabot.yml
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
-		.github\dependabot.yml = .github\dependabot.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpToJsonSchema", "src\libs\CSharpToJsonSchema\CSharpToJsonSchema.csproj", "{93367DED-6C55-4267-923A-4412D03376FB}"
@@ -80,10 +79,14 @@ Global
 		{6167F915-83EB-42F9-929B-AD4719A55811}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6167F915-83EB-42F9-929B-AD4719A55811}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6167F915-83EB-42F9-929B-AD4719A55811}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1942E3E5-F151-4C90-BECE-140AAD8C66DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1942E3E5-F151-4C90-BECE-140AAD8C66DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC07C90E-A58C-44B3-82D2-E2EB8F777B92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DC07C90E-A58C-44B3-82D2-E2EB8F777B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC07C90E-A58C-44B3-82D2-E2EB8F777B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC07C90E-A58C-44B3-82D2-E2EB8F777B92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1942E3E5-F151-4C90-BECE-140AAD8C66DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1942E3E5-F151-4C90-BECE-140AAD8C66DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1942E3E5-F151-4C90-BECE-140AAD8C66DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1942E3E5-F151-4C90-BECE-140AAD8C66DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,6 @@
 ﻿using System.ClientModel;
 using CSharpToJsonSchema.MeaiTests.Services;
+using GenerativeAI.Microsoft;
 using Microsoft.Extensions.AI;
 using OpenAI;
 using OpenAI.Models;
@@ -34,7 +35,6 @@ public class Meai_Tests
             .Be(true);
         
         Console.WriteLine(response.Text);
-
     }
     
     //[TestMethod]
@@ -47,9 +47,10 @@ public class Meai_Tests
         
         var client = new OpenAIClient(new ApiKeyCredential(key));
 
-        Microsoft.Extensions.AI.OpenAIChatClient openAiClient = new OpenAIChatClient(client.GetChatClient("gpt-4o-mini"));
+        //Microsoft.Extensions.AI.OpenAIChatClient openAiClient = new OpenAIChatClient(client.GetChatClient("gpt-4o-mini"));
 
-        var chatClient = new Microsoft.Extensions.AI.FunctionInvokingChatClient(openAiClient);
+        var chatClient = new GenerativeAIChatClient(Environment.GetEnvironmentVariable("GOOGLE_API_KEY",EnvironmentVariableTarget.User));
+        //var chatClient = new Microsoft.Extensions.AI.FunctionInvokingChatClient(openAiClient);
         var chatOptions = new ChatOptions();
 
         var service = new BookStoreService();
@@ -63,6 +64,5 @@ public class Meai_Tests
             .Be(true);
         
         Console.WriteLine(response.Text);
-
     }
 }

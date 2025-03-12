@@ -136,6 +136,7 @@ public static class ToModels
 
         return string.Join(".", commonParts);
     }
+    
     private static OpenApiSchema ToParameterData(ITypeSymbol typeSymbol, string? name = null,
         string? description = null, bool isRequired = true)
     {
