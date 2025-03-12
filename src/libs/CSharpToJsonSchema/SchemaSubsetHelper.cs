@@ -113,13 +113,13 @@ public static class SchemaBuilder
                 else
                 {
                     throw new InvalidOperationException(
-                        $"Google's API for strucutured output requires every property to have one defined type, not multiple options. Path: {schema.GetPath()} Schema: {schema.ToJsonString()}");
+                        $"LLM's API for strucutured output requires every property to have one defined type, not multiple options. Path: {schema.GetPath()} Schema: {schema.ToJsonString()}");
                 }
             }
             else if (array.Count > 2)
             {
                 throw new InvalidOperationException(
-                    $"Google's API for strucutured output requires every property to have one defined type, not multiple options. Path: {schema.GetPath()} Schema: {schema.ToJsonString()}");
+                    $"LLM's API for strucutured output requires every property to have one defined type, not multiple options. Path: {schema.GetPath()} Schema: {schema.ToJsonString()}");
             }
         }
     }
