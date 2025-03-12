@@ -24,4 +24,4 @@ chatOptions.Tools = tools.AsMeaiTools();
 var message = new ChatMessage(ChatRole.User, prompt);
 var response = await chatClient.GetResponseAsync(message,options:chatOptions).ConfigureAwait(false);
         
-Console.WriteLine(response.Choices.LastOrDefault().Text);
+Console.WriteLine(response.Text);
