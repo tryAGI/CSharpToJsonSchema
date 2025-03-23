@@ -10,7 +10,6 @@ public class MethodFunctionTools_Tests
         var value = await tools.CallAsync(nameof(mf.SampleFunctionTool_StringAsync), "{\"input\":\"test\"}");
 
         Assert.Equal(value, "\"Hello world\"");
-        
     }
 
     [Fact]
@@ -72,7 +71,20 @@ public class MethodFunctionTools_Tests
     {
         var tools = new Tools([MethodFunctionTools.SampleFunctionTool_Static_Void]);
         await tools.CallAsync(nameof(MethodFunctionTools.SampleFunctionTool_Static_Void), "{\"input\":\"test\"}");
-       
+    }
+    
+    [Fact]
+    public async Task Should_SampleFunctionTool_Static_No_Parameters()
+    {
+        var tools = new Tools([MethodFunctionTools.SampleFunctionTool_Static_No_Parameters]);
+        await tools.CallAsync(nameof(MethodFunctionTools.SampleFunctionTool_Static_No_Parameters), "{}");
+    }
+    
+    [Fact]
+    public async Task Should_SampleFunctionTool_No_Parameters()
+    {
+        var tools = new Tools([MethodFunctionTools.SampleFunctionTool_No_Parameters]);
+        await tools.CallAsync(nameof(MethodFunctionTools.SampleFunctionTool_No_Parameters), "{}");
     }
     
 }

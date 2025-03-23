@@ -9,9 +9,10 @@ namespace CSharpToJsonSchema;
 
 public static class SchemaBuilder
 {
-   
-    public static OpenApiSchema ConvertToSchema(JsonTypeInfo type, string descriptionString)
+    public static OpenApiSchema? ConvertToSchema(JsonTypeInfo type, string descriptionString)
     {
+        if (type.Properties.Count == 0)
+            return null;
         var typeInfo = type;
 
         var dics = JsonSerializer.Deserialize(descriptionString,
@@ -26,33 +27,35 @@ public static class SchemaBuilder
                     {
                         schema["type"] = "string";
                     }
-                
+
                     ExtractDescription(context, schema, dics);
                     if (context.PropertyInfo == null)
                         return schema;
-               
+
                     return schema;
                 },
             });
-        
+
         var schema = JsonSerializer.Deserialize(x.ToJsonString(), OpenApiSchemaJsonContext.Default.OpenApiSchema);
 
         foreach (var re in schema.Properties)
         {
             required.Add(re.Key);
         }
-       
+
         var mainDescription = schema.Description ?? (dics.TryGetValue("mainFunction_Desc", out var desc) ? desc : "");
-        return new OpenApiSchema()
-        {
-            Description = mainDescription,
-            Properties = schema.Properties,
-            Required = required,
-            Type = "object"
-        };
+        return
+            new OpenApiSchema()
+            {
+                Description = mainDescription,
+                Properties = schema.Properties,
+                Required = required,
+                Type = "object"
+            };
     }
-    
-    private static void ExtractDescription(JsonSchemaExporterContext context, JsonNode schema, IDictionary<string, string> dics)
+
+    private static void ExtractDescription(JsonSchemaExporterContext context, JsonNode schema,
+        IDictionary<string, string> dics)
     {
         // Determine if a type or property and extract the relevant attribute provider.
         ICustomAttributeProvider? attributeProvider = context.PropertyInfo is not null
@@ -76,7 +79,7 @@ public static class SchemaBuilder
         }
 
         FixType(schema);
-        
+
         // Apply description attribute to the generated schema.
         if (description is not null)
         {
@@ -84,14 +87,14 @@ public static class SchemaBuilder
             {
                 // Handle the case where the schema is a Boolean.
                 JsonValueKind valueKind = schema.GetValueKind();
-                
+
                 schema = jObj = new JsonObject();
                 if (valueKind is JsonValueKind.False)
                 {
                     jObj.Add("not", true);
                 }
             }
-            
+
             jObj.Insert(0, "description", description);
         }
     }
@@ -100,7 +103,7 @@ public static class SchemaBuilder
     {
         // If "type" is an array, remove "null" and collapse if it leaves only one type
         var typeValue = schema["type"];
-        if (typeValue!= null && typeValue is JsonArray array)
+        if (typeValue != null && typeValue is JsonArray array)
         {
             if (array.Count == 2)
             {
@@ -123,6 +126,7 @@ public static class SchemaBuilder
             }
         }
     }
+
     public static string ToCamelCase(string str)
     {
         if (!string.IsNullOrEmpty(str) && str.Length > 1)

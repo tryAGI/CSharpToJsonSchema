@@ -52,4 +52,15 @@ public class MethodFunctionTools
     {
         return "Hello world from string return";
     }
+    
+    [FunctionTool]
+    public static string SampleFunctionTool_Static_No_Parameters()
+    {
+        return "Hello world from string return";
+    }
+    [FunctionTool]
+    public static string SampleFunctionTool_No_Parameters()
+    {
+        return "Hello world from string return";
+    }
 }
