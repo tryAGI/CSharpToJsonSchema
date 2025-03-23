@@ -17,6 +17,8 @@ public interface IBookStoreService
 
     [Description("Get book page content")]
     public Task<string> GetBookPageContentAsync([Description("Book Name")] string bookName, [Description("Book Page Number")] int bookPageNumber, CancellationToken cancellationToken = default);
+    [Description("Get List of Books")]
+    public Task<List<GetAuthorBook>> GetBooksAsync(CancellationToken cancellationToken = default);
 
 }
 public class BookStoreService : IBookStoreService
@@ -34,5 +36,10 @@ public class BookStoreService : IBookStoreService
     public Task<string> GetBookPageContentAsync(string bookName, int bookPageNumber, CancellationToken cancellationToken = default)
     {
         return Task.FromResult("this is a cool weather out there, and I am stuck at home.");
+    }
+
+    public Task<List<GetAuthorBook>> GetBooksAsync(CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(new List<GetAuthorBook>(){new GetAuthorBook(){Title = "Five point someone", Description = "This book is about 3 college friends"},new GetAuthorBook(){Title = "Two States", Description = "This book is about intercast marriage in India"}});
     }
 }

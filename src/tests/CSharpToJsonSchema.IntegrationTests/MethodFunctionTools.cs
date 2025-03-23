@@ -53,6 +53,8 @@ public class MethodFunctionTools
     {
         return "Hello world from string return";
     }
+    
+    
 
   
   
