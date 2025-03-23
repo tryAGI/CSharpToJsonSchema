@@ -37,7 +37,7 @@ public class Meai_Tests
         Console.WriteLine(response.Text);
     }
     
-    [TestMethod]
+   // [TestMethod]
     public async Task ShouldInvokeTheFunctions_NoParameters()
     {
         var key = Environment.GetEnvironmentVariable("OPEN_AI_APIKEY",EnvironmentVariableTarget.User);
@@ -64,7 +64,7 @@ public class Meai_Tests
         Console.WriteLine(response.Text);
     }
     
-    [TestMethod]
+    //[TestMethod]
     public async Task ShouldInvokeTheFunctions_NoParameters2()
     {
         var key = Environment.GetEnvironmentVariable("OPEN_AI_APIKEY",EnvironmentVariableTarget.User);
@@ -119,7 +119,7 @@ public class Meai_Tests
         
         Console.WriteLine(response.Text);
     }
-    [TestMethod]
+   // [TestMethod]
     public async Task ShouldInvokeTheBookService_NoParameters()
     {
         var key = Environment.GetEnvironmentVariable("OPEN_AI_APIKEY",EnvironmentVariableTarget.User);

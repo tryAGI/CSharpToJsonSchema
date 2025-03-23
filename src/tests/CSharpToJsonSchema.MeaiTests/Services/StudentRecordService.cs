@@ -66,7 +66,7 @@ public class StudentRecordService
     
     [System.ComponentModel.Description("Get all student Records")]
     [FunctionTool(MeaiFunctionTool = true)]
-    public async Task<List<StudentRecord>> GetStudentsList2(CancellationToken cancellationToken = default)
+    public  List<StudentRecord> GetStudentsList2()
     {
         return new List<StudentRecord>
         {
