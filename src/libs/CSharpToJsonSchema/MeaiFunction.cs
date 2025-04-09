@@ -80,15 +80,16 @@ public partial class MeaiFunction : AIFunction
         return _options;
     #pragma warning restore IL2026, IL3050 // Reflection is used only when enabled
     }
-    
 
+
+   
     /// <summary>
     /// Invokes the tool with the given arguments asynchronously.
     /// </summary>
     /// <param name="arguments">The arguments to pass to the tool.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation, if needed.</param>
     /// <returns>The result of the tool's execution as a deserialized object.</returns>
-    protected override async Task<object?> InvokeCoreAsync(IEnumerable<KeyValuePair<string, object?>> arguments,
+    protected override async ValueTask<object?> InvokeCoreAsync(AIFunctionArguments arguments,
         CancellationToken cancellationToken)
     {
         var json = GetArgsString(arguments);
