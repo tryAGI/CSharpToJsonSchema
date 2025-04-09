@@ -91,7 +91,7 @@ public class Meai_Tests
         Console.WriteLine(response.Text);
     }
     
-    //[TestMethod]
+   // [TestMethod]
     public async Task ShouldInvokeTheBookService()
     {
         var key = Environment.GetEnvironmentVariable("OPEN_AI_APIKEY",EnvironmentVariableTarget.User);
@@ -119,7 +119,7 @@ public class Meai_Tests
         
         Console.WriteLine(response.Text);
     }
-   // [TestMethod]
+    //[TestMethod]
     public async Task ShouldInvokeTheBookService_NoParameters()
     {
         var key = Environment.GetEnvironmentVariable("OPEN_AI_APIKEY",EnvironmentVariableTarget.User);
