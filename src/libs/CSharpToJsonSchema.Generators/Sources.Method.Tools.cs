@@ -2,6 +2,7 @@
 using CSharpToJsonSchema.Generators.Models;
 using H.Generators.Extensions;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace CSharpToJsonSchema.Generators;
 
@@ -45,7 +46,7 @@ namespace {@interface.Namespace}
             tool = new global::CSharpToJsonSchema.Tool
             {{
                 Name = ""{method.Name}"",
-                Description = ""{method.Description}"",
+                Description = ""{GetDescriptionStringAsValidCSharp(method.Description)}"",
                 Strict = {(method.IsStrict ? "true" : "false")},
                 Parameters = global::CSharpToJsonSchema.SchemaBuilder.ConvertToSchema(global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.{method.Name}Args,{"\""}{GetDictionaryString(method)}{"\""}),
             }};
