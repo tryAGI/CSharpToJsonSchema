@@ -2,7 +2,6 @@
 using CSharpToJsonSchema.Generators.Models;
 using H.Generators.Extensions;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace CSharpToJsonSchema.Generators;
 
