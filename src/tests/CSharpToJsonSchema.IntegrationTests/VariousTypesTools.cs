@@ -30,6 +30,15 @@ public interface IVariousTypesTools
     
     [Description("Gets the value")]
     public Task<int> GetValueAsync(CancellationToken cancellationToken = default);
+
+    [Description("Gets the value\nWith multiple lines")]
+    public Task<int> GetValueAsync2(CancellationToken cancellationToken = default);
+
+    [Description("""
+        Gets the value
+        With multiple lines
+        """)]
+    public Task<int> GetValueAsync3(CancellationToken cancellationToken = default);
 }
 
 public class VariousTypesService : IVariousTypesTools
@@ -62,6 +71,16 @@ public class VariousTypesService : IVariousTypesTools
     }
 
     public Task<int> GetValueAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<int> GetValueAsync2(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<int> GetValueAsync3(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

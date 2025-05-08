@@ -3,6 +3,7 @@ using CSharpToJsonSchema.Generators.Conversion;
 using CSharpToJsonSchema.Generators.Models;
 using H.Generators;
 using H.Generators.Extensions;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace CSharpToJsonSchema.Generators;
 
@@ -42,7 +43,7 @@ internal static partial class Sources
                                     .Select(static x => $"\"{x.Name}\""))} }},
 {indent}                    }}";
         }
-        
+
         if (parameter.EnumValues.Count != 0)
         {
             return $@"new {name}
@@ -52,7 +53,7 @@ internal static partial class Sources
 {indent}                        Enum = new string[] {{ {string.Join(", ", parameter.EnumValues.Select(static x => $"\"{x}\""))} }},
 {indent}                    }}";
         }
-        
+
         return $@"new {name}
 {indent}                    {{
 {indent}                        Type = ""{parameter.SchemaType}"",{(parameter.Format != null ? $@"
@@ -80,7 +81,7 @@ namespace {@interface.Namespace}
                 new global::CSharpToJsonSchema.Tool
                 {{
                     Name = ""{method.Name}"",
-                    Description = ""{method.Description}"",
+                    Description = ""{GetDescriptionStringAsValidCSharp(method.Description)}"",
                     Strict = {(method.IsStrict ? "true" : "false")},
                     Parameters = global::CSharpToJsonSchema.SchemaBuilder.ConvertToSchema(global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.{method.Name}Args,{"\""}{GetDictionaryString(method)}{"\""}),
                 }},
@@ -91,19 +92,24 @@ namespace {@interface.Namespace}
 }}";
     }
 
-   
+
 
     private static string GetDictionaryString(MethodData data)
     {
         StringBuilder sb = new StringBuilder();
 
         var methodDescriptions = new Dictionary<string, string>();
-        methodDescriptions.Add("MainFunction_Desc", data.Description);
-        sb.Append("{");
+        methodDescriptions.Add("MainFunction_Desc", GetDescriptionStringAsValidCSharp(data.Description));
+        sb.Append('{');
         var lst = methodDescriptions.Select(s => $"\"{s.Key.ToCamelCase()}\":\"{s.Value}\"");
         sb.Append(string.Join(", ", lst));
-        sb.Append("}");
-        
-        return sb.ToString().Replace("\"","\\\"");
+        sb.Append('}');
+
+        return sb.ToString().Replace("\"", "\\\"");
+    }
+
+    public static string GetDescriptionStringAsValidCSharp(string description)
+    {
+        return SymbolDisplay.FormatLiteral(description, quote: false);
     }
 }
