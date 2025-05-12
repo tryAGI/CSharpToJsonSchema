@@ -9,13 +9,13 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Google_GenerativeAI.Microsoft" Version="2.5.9" />
+        <PackageReference Include="Google_GenerativeAI.Microsoft" Version="2.5.10" />
         <PackageReference Include="H.Generators.Tests.Extensions" Version="1.24.2" />
         <PackageReference Include="H.Resources.Generator" Version="1.8.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.AI" Version="9.4.0-preview.1.25207.5" />
+        <PackageReference Include="Microsoft.Extensions.AI" Version="9.4.3-preview.1.25230.7" />
         <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.3.0-preview.1.25161.3" />
         <PackageReference Include="MSTest" Version="3.8.3" />
         <PackageReference Include="FluentAssertions" Version="8.2.0" />
@@ -24,7 +24,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.MSTest" Version="1.1.2" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.13.0" />
-        <PackageReference Include="Verify.MSTest" Version="30.0.0" />
+        <PackageReference Include="Verify.MSTest" Version="30.1.0" />
         <PackageReference Include="Verify.SourceGenerators" Version="2.5.0" />
     </ItemGroup>
 
