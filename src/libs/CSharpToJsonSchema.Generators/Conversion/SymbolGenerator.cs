@@ -71,16 +71,14 @@ public static class SymbolGenerator
             .AddMembers(ns) // if ns is a NamespaceDeclarationSyntax
             .NormalizeWhitespace();
         
-        var parseOptions = CSharpParseOptions.Default.WithLanguageVersion(originalCompilation.GetLanguageVersion()?? LanguageVersion.Default);
-        var syntaxTree =CSharpSyntaxTree.Create(compilationUnit,parseOptions);
-        //CSharpSyntaxTree.Create(ns.NormalizeWhitespace());
+        // Get parse options from an existing syntax tree to preserve all features (needed for AOT)
+        var parseOptions = originalCompilation.SyntaxTrees.FirstOrDefault()?.Options as CSharpParseOptions
+            ?? CSharpParseOptions.Default.WithLanguageVersion(originalCompilation.GetLanguageVersion() ?? LanguageVersion.Default);
+        var syntaxTree = CSharpSyntaxTree.Create(compilationUnit, parseOptions);
 
         // Now we need to add this syntax tree to a new or existing compilation
-        var assemblyName = "TemporaryAssembly";
         var compilation = originalCompilation
             .AddSyntaxTrees(syntaxTree);
-            //.WithAssemblyName(assemblyName);
-        
 
         // Get the semantic model for our newly added syntax tree
         var semanticModel = compilation.GetSemanticModel(syntaxTree);
@@ -96,43 +94,36 @@ public static class SymbolGenerator
         var classSymbol = semanticModel.GetDeclaredSymbol(classNode) as ITypeSymbol;
         return classSymbol;
     }
-    
+
     public static INamedTypeSymbol? GenerateToolJsonSerializerContext(
         string rootNamespace,
         Compilation originalCompilation)
     {
-        
-        
         // Example: we create a class name
         var className = $"ToolsJsonSerializerContext";
-        
-        
+
         // Build a class declaration
         var classDecl = SyntaxFactory.ClassDeclaration(className)
             .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
             .AddModifiers(SyntaxFactory.Token(SyntaxKind.PartialKeyword));
 
         // We create a compilation unit holding our new class
-        
-        
-
-        var namespaceName =rootNamespace; // choose your own
+        var namespaceName = rootNamespace;
         var ns = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.IdentifierName(namespaceName))
             .AddMembers(classDecl);
 
         var compilationUnit = SyntaxFactory.CompilationUnit()
-            .AddMembers(ns) // if ns is a NamespaceDeclarationSyntax
+            .AddMembers(ns)
             .NormalizeWhitespace();
-        
-        var parseOptions = CSharpParseOptions.Default.WithLanguageVersion(originalCompilation.GetLanguageVersion()?? LanguageVersion.Default);
-        var syntaxTree =CSharpSyntaxTree.Create(compilationUnit,parseOptions);
-        //CSharpSyntaxTree.Create(ns.NormalizeWhitespace());
+
+        // Get parse options from an existing syntax tree to preserve all features (needed for AOT)
+        var parseOptions = originalCompilation.SyntaxTrees.FirstOrDefault()?.Options as CSharpParseOptions
+            ?? CSharpParseOptions.Default.WithLanguageVersion(originalCompilation.GetLanguageVersion() ?? LanguageVersion.Default);
+        var syntaxTree = CSharpSyntaxTree.Create(compilationUnit, parseOptions);
 
         // Now we need to add this syntax tree to a new or existing compilation
-        var assemblyName = "TemporaryAssembly";
         var compilation = originalCompilation
             .AddSyntaxTrees(syntaxTree);
-            //.WithAssemblyName(assemblyName);
         
 
         // Get the semantic model for our newly added syntax tree
