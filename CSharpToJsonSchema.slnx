@@ -1,0 +1,38 @@
+<Solution>
+  <Folder Name="/helpers/">
+    <Project Path="src/helpers/TrimmingHelper/TrimmingHelper.csproj" />
+  </Folder>
+  <Folder Name="/libs/">
+    <File Path="src/libs/Directory.Build.props" />
+    <Project Path="src/libs/CSharpToJsonSchema.Generators/CSharpToJsonSchema.Generators.csproj" />
+    <Project Path="src/libs/CSharpToJsonSchema/CSharpToJsonSchema.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="src/Directory.Build.props" />
+  </Folder>
+  <Folder Name="/Solution Items/workflows/">
+    <File Path=".github/dependabot.yml" />
+    <File Path=".github/workflows/auto-merge.yml" />
+    <File Path=".github/workflows/dotnet.yml" />
+    <File Path=".github/workflows/pull-request.yml" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="src/tests/CSharpToJsonSchema.AotTests/CSharpToJsonSchema.AotTests.csproj" />
+    <Project Path="src/tests/CSharpToJsonSchema.IntegrationTests/CSharpToJsonSchema.IntegrationTests.csproj" />
+    <Project Path="src/tests/CSharpToJsonSchema.MeaiTests/CSharpToJsonSchema.MeaiTests.csproj">
+      <BuildType Solution="Release|*" Project="?" />
+      <Platform Solution="Release|*" Project="?" />
+      <Build Solution="Release|*" Project="false" />
+    </Project>
+    <Project Path="src/tests/CSharpToJsonSchema.SnapshotTests/CSharpToJsonSchema.SnapshotTests.csproj" />
+    <Project Path="src/tests/CSharpToJsonSchema.UnitTests/CSharpToJsonSchema.UnitTests.csproj" />
+  </Folder>
+  <Project Path="src/tests/AotConsole/AotConsole.csproj">
+    <BuildType Solution="Release|*" Project="?" />
+    <Platform Solution="Release|*" Project="?" />
+    <Build Solution="Release|*" Project="false" />
+  </Project>
+</Solution>
