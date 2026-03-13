@@ -10,10 +10,10 @@ C# source generator library that produces JSON Schema definitions from C# interf
 
 ```bash
 # Build the solution
-dotnet build CSharpToJsonSchema.sln
+dotnet build CSharpToJsonSchema.slnx
 
 # Build for release (also produces NuGet package)
-dotnet build CSharpToJsonSchema.sln -c Release
+dotnet build CSharpToJsonSchema.slnx -c Release
 
 # Run unit tests
 dotnet test src/tests/CSharpToJsonSchema.UnitTests/CSharpToJsonSchema.UnitTests.csproj
@@ -31,7 +31,7 @@ dotnet test src/tests/CSharpToJsonSchema.AotTests/CSharpToJsonSchema.AotTests.cs
 dotnet test src/tests/CSharpToJsonSchema.MeaiTests/CSharpToJsonSchema.MeaiTests.csproj
 
 # Run all tests
-dotnet test CSharpToJsonSchema.sln
+dotnet test CSharpToJsonSchema.slnx
 ```
 
 ## Architecture
