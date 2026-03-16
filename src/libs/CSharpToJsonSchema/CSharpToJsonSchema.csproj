@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup Label="CLSCompliant">
-    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="10.0.5" />
     <AssemblyAttribute Include="System.CLSCompliantAttribute">
       <_Parameter1>true</_Parameter1>
     </AssemblyAttribute>
