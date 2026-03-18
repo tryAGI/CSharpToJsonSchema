@@ -48,7 +48,6 @@ dotnet test CSharpToJsonSchema.slnx
 | `src/tests/CSharpToJsonSchema.AotTests/` | NativeAOT/trimming compatibility tests |
 | `src/tests/CSharpToJsonSchema.MeaiTests/` | Microsoft.Extensions.AI integration tests |
 | `src/tests/AotConsole/` | AOT console test app |
-| `src/helpers/TrimmingHelper/` | Trimming validation helper |
 
 ### How It Works
 
