@@ -11,12 +11,12 @@ permissions:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    if: ${{ (github.actor == 'dependabot[bot]' || github.actor == 'HavenDV') && github.repository_owner == 'tryAGI' }}
+    if: ${{ github.event.pull_request.draft == false && (github.actor == 'dependabot[bot]' || github.actor == 'allcontributors[bot]' || github.actor == 'HavenDV') && github.repository_owner == 'tryAGI' }}
     steps:
       - name: Dependabot metadata
         if: ${{ github.actor == 'dependabot[bot]' }}
         id: metadata
-        uses: dependabot/fetch-metadata@0fb21704c18a42ce5aa8d720ea4b912f5e6babef
+        uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           
@@ -31,9 +31,11 @@ jobs:
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Enable auto-merge
-        run: gh pr merge --auto --merge "$PR_URL"
+        run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          # Use a non-GITHUB_TOKEN secret so the merge can trigger downstream workflows.
+          # For dependabot PRs there are the empty secrets.PERSONAL_TOKEN so we use fallback.
+          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN || secrets.GITHUB_TOKEN }}
