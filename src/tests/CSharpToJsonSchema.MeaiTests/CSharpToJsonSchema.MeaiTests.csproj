@@ -18,7 +18,7 @@
         <PackageReference Include="Microsoft.Extensions.AI" Version="10.4.0" />
         <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.4.0" />
         <PackageReference Include="MSTest" Version="4.1.0" />
-        <PackageReference Include="FluentAssertions" Version="8.9.0" />
+        <PackageReference Include="AwesomeAssertions" Version="9.4.0" />
     </ItemGroup>    
 
     <ItemGroup>
@@ -30,7 +30,7 @@
 
     <ItemGroup Label="GlobalUsings">
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
-        <Using Include="FluentAssertions" />
+        <Using Include="AwesomeAssertions" />
     </ItemGroup>
 
     <ItemGroup>
