@@ -74,7 +74,7 @@ dotnet test CSharpToJsonSchema.slnx
 - **Dependencies:** `Microsoft.Extensions.AI.Abstractions`, `System.Text.Json`, `Microsoft.CodeAnalysis.CSharp` (generator)
 - **Signing:** Strong-named assemblies via `src/key.snk`
 - **Versioning:** Semantic versioning from git tags via MinVer
-- **Testing:** MSTest + FluentAssertions (unit), Verify (snapshot)
+- **Testing:** MSTest + AwesomeAssertions (unit), Verify (snapshot)
 
 ### CI/CD
 
