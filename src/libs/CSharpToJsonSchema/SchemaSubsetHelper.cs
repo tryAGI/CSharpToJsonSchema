@@ -20,6 +20,11 @@ public static class SchemaBuilder
     /// <returns>An <see cref="OpenApiSchema"/> representing the type, or <c>null</c> if the type has no properties.</returns>
     public static OpenApiSchema? ConvertToSchema(JsonTypeInfo type, string descriptionString)
     {
+        if (type is null)
+        {
+            throw new ArgumentNullException(nameof(type));
+        }
+
         if (type.Properties.Count == 0)
             return null;
         var typeInfo = type;

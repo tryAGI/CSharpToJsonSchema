@@ -67,7 +67,8 @@ dotnet test CSharpToJsonSchema.slnx
 
 ### Build Configuration
 
-- **Main library targets:** `netstandard2.0`, `net4.6.2`, `net8.0`, `net9.0`
+- **Main library targets:** `netstandard2.0`, `net8.0`, `net9.0`, `net10.0`
+- **Test projects target:** `net10.0`
 - **Generator targets:** `netstandard2.0` (Roslyn analyzer requirement)
 - **Language:** C# with nullable reference types
 - **AOT/Trimming:** Compatible on net6.0+ (`IsAotCompatible`, `IsTrimmable`)
