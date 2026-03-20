@@ -10,9 +10,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Nuget">
-    <Description>
-      Generated C# SDK based on official CSharpToJsonSchema OpenAPI specification. 
-      Includes C# Source Generator which allows you to define functions natively through a C# interface, and also provides extensions that make it easier to call this interface later</Description>
+    <Description>C# source generator that converts interfaces and methods into JSON Schema definitions for AI function/tool calling (OpenAI, Anthropic, Ollama, Gemini, etc.). No reflection at runtime.</Description>
     <PackageTags>csharp;dotnet;json-schema;source-generator;function-calling;tool-calling;openai;anthropic;ollama;gemini;ai;llm</PackageTags>
   </PropertyGroup>
   

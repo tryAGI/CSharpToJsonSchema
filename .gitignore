@@ -400,3 +400,6 @@ FodyWeavers.xsd
 
 # AutoSDK trimming check temp directory
 .autosdk-trim/
+
+# macOS
+.DS_Store
