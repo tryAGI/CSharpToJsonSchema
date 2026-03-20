@@ -76,6 +76,15 @@ dotnet test CSharpToJsonSchema.slnx
 - **Versioning:** Semantic versioning from git tags via MinVer
 - **Testing:** MSTest + AwesomeAssertions (unit), Verify (snapshot)
 
+### Vendored Code: `JsonGen/` Directory
+
+The `src/libs/CSharpToJsonSchema.Generators/JsonGen/` directory contains **vendored code forked from the .NET runtime's `System.Text.Json` source generator**. This code handles JSON schema generation and serializer context parsing.
+
+**Key rules:**
+- **Do not modify** files in `JsonGen/` — treat as upstream vendored code
+- Warnings from `JsonGen/` are suppressed via targeted `<Compile Update="JsonGen\**\*.cs">` NoWarn in the Generators csproj
+- If the upstream code needs updating, replace the entire `JsonGen/` directory rather than patching individual files
+
 ### CI/CD
 
 - Uses shared workflows from `HavenDV/workflows` repo
