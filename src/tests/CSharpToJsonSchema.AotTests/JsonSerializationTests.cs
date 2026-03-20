@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using CSharpToJsonSchema.AotTests;
 using CSharpToJsonSchema.IntegrationTests.Services;
-using FluentAssertions;
+using AwesomeAssertions;
 
 namespace CSharpToJsonSchema.IntegrationTests;
 
