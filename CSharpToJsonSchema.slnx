@@ -20,16 +20,16 @@
     <Project Path="src/tests/CSharpToJsonSchema.AotTests/CSharpToJsonSchema.AotTests.csproj" />
     <Project Path="src/tests/CSharpToJsonSchema.IntegrationTests/CSharpToJsonSchema.IntegrationTests.csproj" />
     <Project Path="src/tests/CSharpToJsonSchema.MeaiTests/CSharpToJsonSchema.MeaiTests.csproj">
-      <BuildType Solution="Release|*" Project="?" />
-      <Platform Solution="Release|*" Project="?" />
+      <BuildType Solution="Release|*" Project="Release" />
+      <Platform Solution="Release|*" Project="Any CPU" />
       <Build Solution="Release|*" Project="false" />
     </Project>
     <Project Path="src/tests/CSharpToJsonSchema.SnapshotTests/CSharpToJsonSchema.SnapshotTests.csproj" />
     <Project Path="src/tests/CSharpToJsonSchema.UnitTests/CSharpToJsonSchema.UnitTests.csproj" />
   </Folder>
   <Project Path="src/tests/AotConsole/AotConsole.csproj">
-    <BuildType Solution="Release|*" Project="?" />
-    <Platform Solution="Release|*" Project="?" />
+    <BuildType Solution="Release|*" Project="Release" />
+    <Platform Solution="Release|*" Project="Any CPU" />
     <Build Solution="Release|*" Project="false" />
   </Project>
 </Solution>
