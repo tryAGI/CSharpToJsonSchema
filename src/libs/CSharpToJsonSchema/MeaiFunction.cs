@@ -25,25 +25,26 @@ public partial class MeaiFunction : AIFunction
     /// <summary>
     /// Gets the name of the tool.
     /// </summary>
-    public override string Name => _tool.Name;
+    public override string Name => _tool.Name ?? string.Empty;
 
     /// <summary>
     /// Gets the description of the tool.
     /// </summary>
-    public override string Description => _tool.Description;
+    public override string Description => _tool.Description ?? string.Empty;
     
     private JsonSerializerOptions? _options;
    
     /// <summary>
     /// Gets additional properties associated with the tool.
     /// </summary>
-    public override IReadOnlyDictionary<string, object?> AdditionalProperties => new ReadOnlyDictionary<string, object?>(_tool.AdditionalProperties);
+    public override IReadOnlyDictionary<string, object?> AdditionalProperties => new ReadOnlyDictionary<string, object?>(_tool.AdditionalProperties!);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MeaiFunction"/> class.
     /// </summary>
     /// <param name="tool">The tool associated with this function.</param>
     /// <param name="call">The function to execute the tool with input arguments.</param>
+    /// <param name="options">Optional JSON serializer options for argument serialization.</param>
     public MeaiFunction(Tool tool, Func<string, CancellationToken, Task<string>> call, JsonSerializerOptions? options = null)
     {
         this._tool = tool;
@@ -94,7 +95,7 @@ public partial class MeaiFunction : AIFunction
     {
         var json = GetArgsString(arguments);
 
-        var call = await _call(json, cancellationToken);
+        var call = await _call(json, cancellationToken).ConfigureAwait(false);
 
         return JsonSerializer.Deserialize(call, OpenApiSchemaJsonContext.Default.JsonElement);
     }
@@ -153,7 +154,7 @@ public partial class MeaiFunction : AIFunction
                         _options = InitializeReflectionOptions();
                         #pragma warning disable IL2026, IL3050 // Reflection is used only when enabled
                     }
-                    var typeInfo = _options.GetTypeInfo(type);
+                    var typeInfo = _options.GetTypeInfo(type!);
 
                     var str = JsonSerializer.Serialize(args.Value, typeInfo);
                     jsonObject[args.Key] = JsonNode.Parse(str);

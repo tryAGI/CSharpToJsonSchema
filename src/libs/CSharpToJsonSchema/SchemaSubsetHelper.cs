@@ -7,8 +7,17 @@ using System.Text.Json.Serialization.Metadata;
 
 namespace CSharpToJsonSchema;
 
+/// <summary>
+/// Builds OpenAPI-compatible JSON schemas from <see cref="JsonTypeInfo"/> metadata.
+/// </summary>
 public static class SchemaBuilder
 {
+    /// <summary>
+    /// Converts a <see cref="JsonTypeInfo"/> into an <see cref="OpenApiSchema"/> with property descriptions.
+    /// </summary>
+    /// <param name="type">The JSON type info to convert.</param>
+    /// <param name="descriptionString">A JSON-serialized dictionary mapping property names to descriptions.</param>
+    /// <returns>An <see cref="OpenApiSchema"/> representing the type, or <c>null</c> if the type has no properties.</returns>
     public static OpenApiSchema? ConvertToSchema(JsonTypeInfo type, string descriptionString)
     {
         if (type.Properties.Count == 0)
@@ -16,7 +25,8 @@ public static class SchemaBuilder
         var typeInfo = type;
 
         var dics = JsonSerializer.Deserialize(descriptionString,
-            OpenApiSchemaJsonContext.Default.IDictionaryStringString);
+            OpenApiSchemaJsonContext.Default.IDictionaryStringString)
+            ?? new Dictionary<string, string>();
         List<string> required = new List<string>();
         var x = typeInfo.GetJsonSchemaAsNode(
             exporterOptions: new JsonSchemaExporterOptions()
@@ -36,7 +46,8 @@ public static class SchemaBuilder
                 },
             });
 
-        var schema = JsonSerializer.Deserialize(x.ToJsonString(), OpenApiSchemaJsonContext.Default.OpenApiSchema);
+        var schema = JsonSerializer.Deserialize(x.ToJsonString(), OpenApiSchemaJsonContext.Default.OpenApiSchema)
+            ?? new OpenApiSchema();
 
         foreach (var re in schema.Properties)
         {
@@ -127,6 +138,11 @@ public static class SchemaBuilder
         }
     }
 
+    /// <summary>
+    /// Converts a string to camelCase by lowering the first character.
+    /// </summary>
+    /// <param name="str">The string to convert.</param>
+    /// <returns>The camelCase version of the string.</returns>
     public static string ToCamelCase(string str)
     {
         if (!string.IsNullOrEmpty(str) && str.Length > 1)

@@ -2,6 +2,9 @@
 
 namespace CSharpToJsonSchema;
 
+/// <summary>
+/// Source-generated JSON serializer context for OpenAPI schema types.
+/// </summary>
 [JsonSerializable(typeof(OpenApiSchema))]
 [JsonSerializable(typeof(IDictionary<string, OpenApiSchema>))]
 [JsonSerializable(typeof(IDictionary<string, string>))]

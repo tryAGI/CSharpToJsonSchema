@@ -6,7 +6,7 @@
         <GenerateDocumentationFile>false</GenerateDocumentationFile>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-        <NoWarn>$(NoWarn);CA1014;CA1031;CA1308</NoWarn>
+        <NoWarn>$(NoWarn);CA1014;CA1031;CA1308;CA1860</NoWarn>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
@@ -26,6 +26,13 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" PrivateAssets="all" />
         <PackageReference Include="H.Generators.Extensions" Version="1.24.2" PrivateAssets="all" />       
 
+    </ItemGroup>
+
+    <!-- Suppress warnings in vendored .NET runtime JsonGen code -->
+    <ItemGroup>
+        <Compile Update="JsonGen\**\*.cs">
+            <NoWarn>$(NoWarn);CS8600;CS8601;CS8602;CS8603;CS8604;CS8619;CS8620;CS8625;CS8714;CS8762;CA1000;CA1002;CA1008;CA1019;CA1024;CA1028;CA1034;CA1052;CA1062;CA1305;CA1310;CA1508;CA1715;CA1720;CA1815;CA1819;CA1822;CA2201</NoWarn>
+        </Compile>
     </ItemGroup>
 
 </Project>
