@@ -3,7 +3,6 @@ using CSharpToJsonSchema.MeaiTests.Services;
 using GenerativeAI.Microsoft;
 using Microsoft.Extensions.AI;
 using OpenAI;
-using OpenAI.Models;
 
 namespace CSharpToJsonSchema.MeaiTests;
 
@@ -19,7 +18,7 @@ public class Meai_Tests
         
         var client = new OpenAIClient(new ApiKeyCredential(key));
 
-        Microsoft.Extensions.AI.OpenAIChatClient openAiClient = new OpenAIChatClient(client.GetChatClient("gpt-4o-mini"));
+        IChatClient openAiClient = client.GetChatClient("gpt-4o-mini").AsIChatClient();
 
         var chatClient = new Microsoft.Extensions.AI.FunctionInvokingChatClient(openAiClient);
         var chatOptions = new ChatOptions();
@@ -46,7 +45,7 @@ public class Meai_Tests
         
         var client = new OpenAIClient(new ApiKeyCredential(key));
 
-        Microsoft.Extensions.AI.OpenAIChatClient openAiClient = new OpenAIChatClient(client.GetChatClient("gpt-4o-mini"));
+        IChatClient openAiClient = client.GetChatClient("gpt-4o-mini").AsIChatClient();
 
         var chatClient = new Microsoft.Extensions.AI.FunctionInvokingChatClient(openAiClient);
         var chatOptions = new ChatOptions();
@@ -74,7 +73,7 @@ public class Meai_Tests
         
         var client = new OpenAIClient(new ApiKeyCredential(key));
 
-        Microsoft.Extensions.AI.OpenAIChatClient openAiClient = new OpenAIChatClient(client.GetChatClient("gpt-4o-mini"));
+        IChatClient openAiClient = client.GetChatClient("gpt-4o-mini").AsIChatClient();
 
         var chatClient = new Microsoft.Extensions.AI.FunctionInvokingChatClient(openAiClient);
         var chatOptions = new ChatOptions();
@@ -131,7 +130,7 @@ public class Meai_Tests
             return;
         var prompt = "Get list of available books";
         
-        var chatClient = new OpenAIClient(new ApiKeyCredential(key)).AsChatClient("gpt-4o-mini").AsBuilder().UseFunctionInvocation().Build();
+        var chatClient = new OpenAIClient(new ApiKeyCredential(key)).GetChatClient("gpt-4o-mini").AsIChatClient().AsBuilder().UseFunctionInvocation().Build();
 
         //Microsoft.Extensions.AI.OpenAIChatClient openAiClient = new OpenAIChatClient(client.GetChatClient("gpt-4o-mini"));
 

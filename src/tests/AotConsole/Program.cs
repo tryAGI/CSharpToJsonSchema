@@ -12,7 +12,7 @@ var prompt = "how does student john doe in senior grade is doing this year, enro
 //prompt = "what is written on page 96 in the book 'damdamadum'";
 var client = new OpenAIClient(new ApiKeyCredential(key));
 
-Microsoft.Extensions.AI.OpenAIChatClient openAiClient = new OpenAIChatClient(client.GetChatClient("gpt-4o-mini"));
+IChatClient openAiClient = client.GetChatClient("gpt-4o-mini").AsIChatClient();
 
 var chatClient = new FunctionInvokingChatClient(openAiClient);
 var chatOptions = new ChatOptions();
