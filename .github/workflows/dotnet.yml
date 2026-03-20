@@ -40,7 +40,7 @@ jobs:
           
       - name: Publish to NuGet
         run: dotnet nuget push
-          **.nupkg
+          src/libs/**/*.nupkg
           --skip-duplicate
           --source https://api.nuget.org/v3/index.json
           --api-key ${{ secrets.NUGET_KEY }}
