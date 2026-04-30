@@ -10,6 +10,7 @@ namespace CSharpToJsonSchema;
 /// <summary>
 /// Represents a function that wraps a tool and provides functionality for executing the tool with specified arguments.
 /// </summary>
+[CLSCompliant(false)]
 public partial class MeaiFunction : AIFunction
 {
     private readonly Tool _tool;
@@ -47,6 +48,9 @@ public partial class MeaiFunction : AIFunction
     /// <param name="options">Optional JSON serializer options for argument serialization.</param>
     public MeaiFunction(Tool tool, Func<string, CancellationToken, Task<string>> call, JsonSerializerOptions? options = null)
     {
+        EnsureNotNull(tool, nameof(tool));
+        EnsureNotNull(call, nameof(call));
+
         this._tool = tool;
         this._call = call;
 
@@ -107,6 +111,8 @@ public partial class MeaiFunction : AIFunction
     /// <returns>A JSON string representation of the arguments.</returns>
     protected virtual string GetArgsString(IEnumerable<KeyValuePair<string, object?>> arguments)
     {
+        EnsureNotNull(arguments, nameof(arguments));
+
         var jsonObject = new JsonObject();
 
         foreach (var args in arguments)
@@ -163,5 +169,17 @@ public partial class MeaiFunction : AIFunction
         }
 
         return jsonObject.ToJsonString();
+    }
+
+    private static void EnsureNotNull(object? value, string paramName)
+    {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(value, paramName);
+#else
+        if (value is null)
+        {
+            throw new ArgumentNullException(paramName);
+        }
+#endif
     }
 }

@@ -20,10 +20,7 @@ public static class SchemaBuilder
     /// <returns>An <see cref="OpenApiSchema"/> representing the type, or <c>null</c> if the type has no properties.</returns>
     public static OpenApiSchema? ConvertToSchema(JsonTypeInfo type, string descriptionString)
     {
-        if (type is null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
+        EnsureNotNull(type, nameof(type));
 
         if (type.Properties.Count == 0)
             return null;
@@ -54,7 +51,9 @@ public static class SchemaBuilder
         var schema = JsonSerializer.Deserialize(x.ToJsonString(), OpenApiSchemaJsonContext.Default.OpenApiSchema)
             ?? new OpenApiSchema();
 
-        foreach (var re in schema.Properties)
+        var properties = schema.Properties ?? new Dictionary<string, OpenApiSchema>();
+
+        foreach (var re in properties)
         {
             required.Add(re.Key);
         }
@@ -64,7 +63,7 @@ public static class SchemaBuilder
             new OpenApiSchema()
             {
                 Description = mainDescription,
-                Properties = schema.Properties,
+                Properties = properties,
                 Required = required,
                 Type = "object"
             };
@@ -150,11 +149,28 @@ public static class SchemaBuilder
     /// <returns>The camelCase version of the string.</returns>
     public static string ToCamelCase(string str)
     {
-        if (!string.IsNullOrEmpty(str) && str.Length > 1)
+        if (string.IsNullOrEmpty(str))
+        {
+            return str;
+        }
+
+        if (str.Length > 1)
         {
             return char.ToLowerInvariant(str[0]) + str.Substring(1);
         }
 
-        return str.ToLowerInvariant();
+        return char.ToLowerInvariant(str[0]).ToString();
+    }
+
+    private static void EnsureNotNull(object? value, string paramName)
+    {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(value, paramName);
+#else
+        if (value is null)
+        {
+            throw new ArgumentNullException(paramName);
+        }
+#endif
     }
 }
