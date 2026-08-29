@@ -24,14 +24,7 @@ public static class TypeToSchemaHelpers
         typeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
         var resolver = typeInfo.OriginatingResolver ?? throw new InvalidOperationException("OriginatingResolver is required.");
         
-        var node = typeInfo.GetJsonSchemaAsNode(exporterOptions: new JsonSchemaExporterOptions
-        {
-            TransformSchemaNode = (context, node) => node,
-            TreatNullObliviousAsNonNullable = true,
-        });
-#pragma warning disable IL2026
-        return AsJsonSchema(typeInfo.Type, strict, resolver, typeInfo.Options);
-#pragma warning restore IL2026
+        return AsJsonSchema(typeInfo, strict, resolver, typeInfo.Options);
     }
 
     /// <summary>
@@ -97,6 +90,37 @@ public static class TypeToSchemaHelpers
                 options);
         }
             
+        return schema;
+    }
+
+    private static OpenApiSchema AsJsonSchema(
+        JsonTypeInfo typeInfo,
+        bool strict,
+        IJsonTypeInfoResolver jsonTypeInfoResolver,
+        JsonSerializerOptions options)
+    {
+        var schema = Create(typeInfo.Type, strict);
+        if (schema.Type == "object")
+        {
+            var properties = new Dictionary<string, OpenApiSchema>();
+            foreach (var property in typeInfo.Properties)
+            {
+                var propertyTypeInfo = jsonTypeInfoResolver.GetTypeInfo(property.PropertyType, options) ??
+                    throw new InvalidOperationException($"JsonTypeInfo for {property.PropertyType.FullName} is not found.");
+                properties.Add(property.Name, AsJsonSchema(propertyTypeInfo, strict, jsonTypeInfoResolver, options));
+            }
+            schema.Properties = properties;
+            schema.Required = properties.Keys.ToArray();
+        }
+        else if (schema.Type == "array")
+        {
+            var elementType = typeInfo.Type.GetElementType() ??
+                throw new InvalidOperationException("Array type must have an element type.");
+            var elementTypeInfo = jsonTypeInfoResolver.GetTypeInfo(elementType, options) ??
+                throw new InvalidOperationException($"JsonTypeInfo for {elementType.FullName} is not found.");
+            schema.Items = AsJsonSchema(elementTypeInfo, strict, jsonTypeInfoResolver, options);
+        }
+
         return schema;
     }
 
