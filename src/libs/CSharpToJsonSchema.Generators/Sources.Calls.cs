@@ -102,7 +102,7 @@ namespace {@interface.Namespace}
         public static string Call{method.Name}(this {@interface.Name} functions, string json)
         {{
             var args = functions.As{method.Name}Args(json);
-            var jsonResult = functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
+            var jsonResult = functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}{(parameter.Type.IsNullableType() ? "!" : "")}"))});
 
      #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
@@ -117,7 +117,9 @@ namespace {@interface.Namespace}
             }}
             else
             {{
-                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+                var jsonTypeInfo = global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()) ??
+                    throw new global::System.InvalidOperationException(""Could not resolve JSON metadata for the result type."");
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, jsonTypeInfo);
             }}
             #else            
               return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
@@ -133,7 +135,7 @@ namespace {@interface.Namespace}
         public static void Call{method.Name}(this {@interface.Name} functions, string json)
         {{
             var args = functions.As{method.Name}Args(json);
-            functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))});
+            functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}{(parameter.Type.IsNullableType() ? "!" : "")}"))});
         }}
 ").Inject()}
 
@@ -146,7 +148,7 @@ namespace {@interface.Namespace}
         {{
             var args = functions.As{method.Name}Args(json);
             var jsonResult = await functions.{method.Name}({string.Join(", ", method.Parameters
-                .Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}").Append("cancellationToken"))});
+                .Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}{(parameter.Type.IsNullableType() ? "!" : "")}").Append("cancellationToken"))});
 
            #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
@@ -160,7 +162,9 @@ namespace {@interface.Namespace}
             }}
             else
             {{
-                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+                var jsonTypeInfo = global::{@interface.Namespace}.{extensionsClassName}JsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()) ??
+                    throw new global::System.InvalidOperationException(""Could not resolve JSON metadata for the result type."");
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, jsonTypeInfo);
             }}
             #else
             return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
@@ -181,7 +185,7 @@ namespace {@interface.Namespace}
             global::System.Threading.CancellationToken cancellationToken = default)
         {{
             var args = functions.As{method.Name}Args(json);
-            await functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}"))}, cancellationToken);
+            await functions.{method.Name}({string.Join(", ", method.Parameters.Select(static parameter => $@"args.{parameter.Name.ToPropertyName()}{(parameter.Type.IsNullableType() ? "!" : "")}"))}, cancellationToken);
 
             return string.Empty;
         }}

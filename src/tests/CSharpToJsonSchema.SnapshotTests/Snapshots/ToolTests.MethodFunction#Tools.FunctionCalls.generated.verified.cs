@@ -380,7 +380,9 @@ namespace CSharpToJsonSchema.IntegrationTests
             }
             else
             {
-                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.ToolsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+                var jsonTypeInfo = global::CSharpToJsonSchema.IntegrationTests.ToolsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()) ??
+                    throw new global::System.InvalidOperationException("Could not resolve JSON metadata for the result type.");
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, jsonTypeInfo);
             }
             #else            
               return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
@@ -410,7 +412,9 @@ namespace CSharpToJsonSchema.IntegrationTests
             }
             else
             {
-                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.ToolsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+                var jsonTypeInfo = global::CSharpToJsonSchema.IntegrationTests.ToolsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()) ??
+                    throw new global::System.InvalidOperationException("Could not resolve JSON metadata for the result type.");
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, jsonTypeInfo);
             }
             #else            
               return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
@@ -455,7 +459,9 @@ namespace CSharpToJsonSchema.IntegrationTests
             }
             else
             {
-                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.ToolsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+                var jsonTypeInfo = global::CSharpToJsonSchema.IntegrationTests.ToolsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()) ??
+                    throw new global::System.InvalidOperationException("Could not resolve JSON metadata for the result type.");
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, jsonTypeInfo);
             }
             #else
             return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
@@ -489,7 +495,9 @@ namespace CSharpToJsonSchema.IntegrationTests
             }
             else
             {
-                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.ToolsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+                var jsonTypeInfo = global::CSharpToJsonSchema.IntegrationTests.ToolsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()) ??
+                    throw new global::System.InvalidOperationException("Could not resolve JSON metadata for the result type.");
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, jsonTypeInfo);
             }
             #else
             return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions

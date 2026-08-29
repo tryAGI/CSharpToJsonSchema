@@ -112,7 +112,7 @@ namespace CSharpToJsonSchema.IntegrationTests
         public static string CallGetCurrentWeather2(this IWeatherStrictTools functions, string json)
         {
             var args = functions.AsGetCurrentWeather2Args(json);
-            var jsonResult = functions.GetCurrentWeather2(args.Location, args.Unit);
+            var jsonResult = functions.GetCurrentWeather2(args.Location!, args.Unit);
 
      #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
@@ -127,7 +127,9 @@ namespace CSharpToJsonSchema.IntegrationTests
             }
             else
             {
-                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.WeatherStrictToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+                var jsonTypeInfo = global::CSharpToJsonSchema.IntegrationTests.WeatherStrictToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()) ??
+                    throw new global::System.InvalidOperationException("Could not resolve JSON metadata for the result type.");
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, jsonTypeInfo);
             }
             #else            
               return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
@@ -147,7 +149,7 @@ namespace CSharpToJsonSchema.IntegrationTests
             global::System.Threading.CancellationToken cancellationToken = default)
         {
             var args = functions.AsGetCurrentWeatherAsync2Args(json);
-            var jsonResult = await functions.GetCurrentWeatherAsync2(args.Location, args.Unit, cancellationToken);
+            var jsonResult = await functions.GetCurrentWeatherAsync2(args.Location!, args.Unit, cancellationToken);
 
            #if NET6_0_OR_GREATER
             if(global::System.Text.Json.JsonSerializer.IsReflectionEnabledByDefault)
@@ -161,7 +163,9 @@ namespace CSharpToJsonSchema.IntegrationTests
             }
             else
             {
-                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, global::CSharpToJsonSchema.IntegrationTests.WeatherStrictToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()));       
+                var jsonTypeInfo = global::CSharpToJsonSchema.IntegrationTests.WeatherStrictToolsExtensionsJsonSerializerContext.Default.GetTypeInfo(jsonResult.GetType()) ??
+                    throw new global::System.InvalidOperationException("Could not resolve JSON metadata for the result type.");
+                return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, jsonTypeInfo);
             }
             #else
             return global::System.Text.Json.JsonSerializer.Serialize(jsonResult, new global::System.Text.Json.JsonSerializerOptions
