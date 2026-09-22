@@ -15,6 +15,9 @@ updates:
           - "*"
     ignore:
       - dependency-name: Microsoft.CodeAnalysis.CSharp
+      - dependency-name: Verify.MSTest
+        update-types:
+          - "version-update:semver-major"
 
   - package-ecosystem: "github-actions"
     directory: "/"
