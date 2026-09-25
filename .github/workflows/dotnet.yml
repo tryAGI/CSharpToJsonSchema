@@ -37,6 +37,13 @@ jobs:
           --configuration Release
           --logger GitHubActions
           --no-build
+
+      - name: Upload tested NuGet packages
+        uses: actions/upload-artifact@v7
+        with:
+          name: nuget-packages-Linux
+          path: src/libs/**/*.nupkg
+          if-no-files-found: error
           
       - name: Publish to NuGet
         run: dotnet nuget push
@@ -62,6 +69,15 @@ jobs:
 
       - name: Run trimming check
         run: autosdk trim src/libs/CSharpToJsonSchema/CSharpToJsonSchema.csproj
+
+  auto-stable-release:
+    needs: [publish, trim-check]
+    if: github.ref == 'refs/heads/main'
+    uses: tryAGI/workflows/.github/workflows/auto-stable-release.yml@main
+    with:
+      project-path: CSharpToJsonSchema.slnx
+    secrets:
+      nuget-key: ${{ secrets.NUGET_KEY }}
 
   release:
     name: Release
