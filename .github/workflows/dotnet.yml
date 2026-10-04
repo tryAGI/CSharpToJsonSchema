@@ -70,6 +70,14 @@ jobs:
       - name: Run trimming check
         run: autosdk trim src/libs/CSharpToJsonSchema/CSharpToJsonSchema.csproj
 
+      - name: Publish fully rooted schema NativeAOT regression
+        run: dotnet publish src/tests/SchemaNativeAot/SchemaNativeAot.csproj
+          --configuration Release --runtime linux-x64
+          --output artifacts/schema-native-aot
+
+      - name: Run schema NativeAOT regression without provider credentials
+        run: artifacts/schema-native-aot/SchemaNativeAot
+
   auto-stable-release:
     needs: [publish, trim-check]
     if: github.ref == 'refs/heads/main'

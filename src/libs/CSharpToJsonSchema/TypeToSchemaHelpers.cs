@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Schema;
 using System.Text.Json.Serialization.Metadata;
 
 namespace CSharpToJsonSchema;
@@ -36,7 +35,7 @@ public static class TypeToSchemaHelpers
     /// <param name="options"></param>
     /// <returns></returns>
 #if NET6_0_OR_GREATER
-    [RequiresUnreferencedCode("This method uses reflection to generate a JSON schema. Use overload with IJsonTypeInfoResolver parameter to avoid this")]
+    [RequiresUnreferencedCode("This method uses reflection to generate a JSON schema. Use the JsonTypeInfo overload to avoid reflection.")]
 #endif
     public static OpenApiSchema AsJsonSchema(
         Type type,
@@ -45,16 +44,6 @@ public static class TypeToSchemaHelpers
         JsonSerializerOptions? options = null)
     {
         type = type ?? throw new ArgumentNullException(nameof(type));
-#pragma warning disable IL2026, IL3050
-        var node = new JsonSerializerOptions
-        {
-            TypeInfoResolver = jsonTypeInfoResolver ?? new DefaultJsonTypeInfoResolver(),
-        }.GetJsonSchemaAsNode(type, exporterOptions: new JsonSchemaExporterOptions
-        {
-            TransformSchemaNode = (context, node) => node,
-            TreatNullObliviousAsNonNullable = true,
-        });
-#pragma warning restore IL2026, IL3050
         var schema = Create(type, strict);
         if (schema.Type == "object")
         {
