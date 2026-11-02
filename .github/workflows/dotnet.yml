@@ -13,6 +13,9 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -45,12 +48,18 @@ jobs:
           path: src/libs/**/*.nupkg
           if-no-files-found: error
           
+      - name: NuGet login (trusted publishing)
+        id: nuget_login
+        uses: NuGet/login@v1
+        with:
+          user: havendv
+
       - name: Publish to NuGet
         run: dotnet nuget push
           src/libs/**/*.nupkg
           --skip-duplicate
           --source https://api.nuget.org/v3/index.json
-          --api-key ${{ secrets.NUGET_KEY }}
+          --api-key ${{ steps.nuget_login.outputs.NUGET_API_KEY }}
   
   trim-check:
     name: Trimming Check
@@ -84,8 +93,6 @@ jobs:
     uses: tryAGI/workflows/.github/workflows/auto-stable-release.yml@main
     with:
       project-path: CSharpToJsonSchema.slnx
-    secrets:
-      nuget-key: ${{ secrets.NUGET_KEY }}
 
   release:
     name: Release
