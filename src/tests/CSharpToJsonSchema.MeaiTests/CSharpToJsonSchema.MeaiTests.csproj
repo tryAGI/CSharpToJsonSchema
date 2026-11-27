@@ -9,14 +9,14 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Google_GenerativeAI.Microsoft" Version="4.0.1" />
+        <PackageReference Include="Google_GenerativeAI.Microsoft" Version="4.1.0" />
         <PackageReference Include="H.Generators.Tests.Extensions" Version="1.24.2" />
         <PackageReference Include="H.Resources.Generator" Version="1.8.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.AI" Version="11.0.0" />
-        <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="11.0.0" />
+        <PackageReference Include="Microsoft.Extensions.AI" Version="11.0.1" />
+        <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="11.0.1" />
         <PackageReference Include="MSTest" Version="4.5.3" />
         <PackageReference Include="AwesomeAssertions" Version="9.6.0" />
     </ItemGroup>    
